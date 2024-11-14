@@ -1,1 +1,1 @@
-# ProNote
+# Power Notes
