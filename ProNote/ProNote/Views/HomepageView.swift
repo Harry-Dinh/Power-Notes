@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct HomepageView: View {
+    
+    @State private var primaryVM = PrimaryVM.instance
+    
     var body: some View {
         NavigationStack {
             List {
@@ -21,7 +24,9 @@ struct HomepageView: View {
                             Label("New Quick Note", systemImage: "doc")
                         }
                         
-                        Button(action: {}) {
+                        Button(action: {
+                            primaryVM.showNotebookCreationView.toggle()
+                        }) {
                             Label("New Notebook...", systemImage: "text.book.closed")
                         }
                         
@@ -50,6 +55,7 @@ struct HomepageView: View {
                     }
                 }
             }
+            .sheet(isPresented: $primaryVM.showNotebookCreationView, content: NoteCreationView.init)
         }
     }
 }

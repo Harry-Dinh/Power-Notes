@@ -8,31 +8,40 @@
 import SwiftUI
 
 struct NoteCreationView: View {
+    
+    @State private var noteCreationVM = NoteCreationVM.instance
+    @Environment(\.dismiss) var dismissModelAction
+    
     var body: some View {
-        Form {
-            
-        }
-        .navigationTitle("Create New Notebook")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {}) {
-                    Text("Cancel")
+        NavigationStack {
+            Form {
+                
+            }
+            .navigationTitle("Create New Notebook")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        dismissModelAction.callAsFunction()
+                    }) {
+                        Text("Cancel")
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        dismissModelAction.callAsFunction()
+                    }) {
+                        Text("Create")
+                            .fontWeight(.semibold)
+                    }
                 }
             }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(action: {}) {
-                    Text("Create")
-                        .fontWeight(.semibold)
-                }
-            }
+            .interactiveDismissDisabled()
         }
     }
 }
 
 #Preview {
-    NavigationStack {
-        NoteCreationView()
-    }
+    NoteCreationView()
 }

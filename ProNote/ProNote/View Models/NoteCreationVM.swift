@@ -10,5 +10,7 @@ import SwiftUI
 
 @Observable
 class NoteCreationVM {
-    var notebookName = ""
+    public static let instance = NoteCreationVM()
+    
+    public var notebookName = ""
 }
