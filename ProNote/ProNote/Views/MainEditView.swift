@@ -10,7 +10,7 @@ import SwiftUI
 struct MainEditView: View {
     
     @State private var mainEditVM = MainEditVM.instance
-    @State private var showMarkupToolbar = true
+    @Environment(\.dismiss) var dismiss
     
     init(_ notebook: PNNotebook) {
         self.mainEditVM.currentNotebook = notebook
@@ -20,10 +20,10 @@ struct MainEditView: View {
         NavigationStack {
             ZStack {
                 List {
-                    
+                    // Page view here...
                 }
                 
-                if showMarkupToolbar {
+                if mainEditVM.showMarkupToolbar {
                     GeometryReader { geometry in
                         CustomMarkupToolbar()
                             .position(x: geometry.size.width / 2, y: geometry.safeAreaInsets.top + 100)
@@ -36,7 +36,10 @@ struct MainEditView: View {
             .toolbarRole(.editor)
             .toolbar {
                 ToolbarItemGroup(placement: .navigation) {
-                    Button(action: {}) {
+                    Button(action: {
+                        dismiss.callAsFunction()
+                        // TODO: Add a function to save progress here
+                    }) {
                         Image(systemName: "chevron.left")
                     }
                     
@@ -72,7 +75,7 @@ struct MainEditView: View {
                         }
                     }
                     
-                    Toggle(isOn: $showMarkupToolbar) {
+                    Toggle(isOn: $mainEditVM.showMarkupToolbar) {
                         Image(systemName: "pencil.tip.crop.circle")
                     }
                     .clipShape(Circle())

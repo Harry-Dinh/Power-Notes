@@ -10,6 +10,8 @@ import SwiftUI
 struct HomepageView: View {
     
     @State private var primaryVM = PrimaryVM.instance
+    @State private var noteCreationVM = NoteCreationVM.instance
+    @State private var mainEditVM = MainEditVM.instance
     
     var body: some View {
         NavigationStack {
@@ -55,7 +57,17 @@ struct HomepageView: View {
                     }
                 }
             }
-            .sheet(isPresented: $primaryVM.showNotebookCreationView, content: NoteCreationView.init)
+            .sheet(isPresented: $primaryVM.showNotebookCreationView) {
+                if primaryVM.openNotebookOnDismiss {
+                    noteCreationVM.openNotebook.toggle()
+                    primaryVM.openNotebookOnDismiss = false
+                }
+            } content: {
+                NoteCreationView()
+            }
+            .fullScreenCover(isPresented: $noteCreationVM.openNotebook) {
+                MainEditView(mainEditVM.currentNotebook)
+            }
         }
     }
 }

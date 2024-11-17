@@ -20,6 +20,15 @@ struct PNNotebook: Identifiable {
         self.name = "Untitled Notebook"
         self.dateCreated = Date()
         self.lastEdited = Date()
+        self.allPages = [PNPage()]      // All notebook when created should a minimum of 1 page
+        self.isBookmarked = false
+    }
+    
+    init(_ name: String) {
+        self.id = UUID().uuidString
+        self.name = name
+        self.dateCreated = Date()
+        self.lastEdited = Date()
         self.allPages = [PNPage()]
         self.isBookmarked = false
     }
