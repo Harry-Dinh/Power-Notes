@@ -12,7 +12,7 @@ struct HomeView: View {
         NavigationSplitView {
             HomeSidebarView()
         } detail: {
-            Text("Folder view :P")
+            HomepageView()
         }
     }
 }
