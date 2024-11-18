@@ -24,10 +24,9 @@ class NoteCreationVM {
         
         // Get the singleton of the Primary VM
         let primaryVM = PrimaryVM.instance
-        
         // Create a new notebook then add it to the primary VM array
         let newNotebook = PNNotebook(notebookName)
-        primaryVM.allNotes.append(newNotebook)
+        primaryVM.homeFolder.notebooks.append(newNotebook)
         return newNotebook
     }
 }

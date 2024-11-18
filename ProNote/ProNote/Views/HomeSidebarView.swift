@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct HomeSidebarView: View {
+    
+    @State private var primaryVM = PrimaryVM.instance
+    
     var body: some View {
         List {
-            NavigationLink(destination: HomepageView()) {
+            NavigationLink(destination: FolderView(primaryVM.homeFolder)) {
                 Label("Home", systemImage: "house")
             }
             

@@ -13,6 +13,7 @@ struct MainEditView: View {
     @Environment(\.dismiss) var dismiss
     
     init(_ notebook: PNNotebook) {
+        print("MainEditView initialized")
         self.mainEditVM.currentNotebook = notebook
     }
     

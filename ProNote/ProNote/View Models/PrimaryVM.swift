@@ -15,7 +15,6 @@ class PrimaryVM {
     public var showNotebookCreationView = false
     public var openNotebookOnDismiss = false
     
-    // TODO: Note to self: In the future, replace these with a centralized user object whose data is fetched from Firebase
-    public var allNotes: [PNNotebook] = []
-    public var allFolders: [PNFolder] = []
+    public var currentUser = PNUser.PLACEHOLDER
+    public var homeFolder = PNFolder("Home")
 }

@@ -42,12 +42,14 @@ struct NoteCreationView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
+                        print("Create notebook button pressed")
                         let notebook = noteCreationVM.createNotebook()  // Let's hope this is not creating a copy of the same one that was added to the primary vm array...
                         mainEditVM.currentNotebook = notebook
                         dismissModelAction.callAsFunction()
                         
                         if (!primaryVM.openNotebookOnDismiss) {
                             primaryVM.openNotebookOnDismiss = true
+                            print("primaryVM.openNotebookOnDismiss: \(primaryVM.openNotebookOnDismiss)")
                         }
                     }) {
                         Text("Create")
@@ -57,9 +59,6 @@ struct NoteCreationView: View {
                 }
             }
             .interactiveDismissDisabled()
-            .fullScreenCover(isPresented: $noteCreationVM.openNotebook) {
-                MainEditView(mainEditVM.currentNotebook)
-            }
         }
     }
 }

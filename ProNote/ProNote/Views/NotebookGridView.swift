@@ -20,7 +20,11 @@ struct NotebookGridView: View {
             Image(systemName: "text.book.closed.fill")
                 .font(.system(size: 100))
             Text(notebook.name)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .font(.subheadline)
         }
+        .frame(width: 300, height: 300)
     }
 }
 

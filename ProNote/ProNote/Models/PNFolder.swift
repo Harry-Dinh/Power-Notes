@@ -25,4 +25,24 @@ struct PNFolder: Identifiable {
     
     /// The name of the SF symbol icon to display on the folder
     var systemIcon: String
+    
+    init(_ name: String) {
+        self.id = UUID().uuidString
+        self.notebooks = []
+        self.subfolders = []
+        self.name = name
+        self.colour = 0x0000
+        self.systemIcon = "none"
+    }
+    
+    init(_ id: String, _ notebooks: [PNNotebook], _ subfolders: [PNFolder], _ name: String, _ colour: Int, _ systemIcon: String) {
+        self.id = id
+        self.notebooks = notebooks
+        self.subfolders = subfolders
+        self.name = name
+        self.colour = colour
+        self.systemIcon = systemIcon
+    }
+    
+    public static let PLACEHOLDER = PNFolder("Placeholder")
 }

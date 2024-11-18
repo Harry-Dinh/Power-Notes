@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @State private var primaryVM = PrimaryVM.instance
+    
     var body: some View {
         NavigationSplitView {
             HomeSidebarView()
         } detail: {
-            HomepageView()
+            FolderView(primaryVM.homeFolder)
         }
     }
 }
