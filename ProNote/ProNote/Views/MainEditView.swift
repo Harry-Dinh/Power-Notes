@@ -13,15 +13,18 @@ struct MainEditView: View {
     @Environment(\.dismiss) var dismiss
     
     init(_ notebook: PNNotebook) {
-        print("MainEditView initialized")
         self.mainEditVM.currentNotebook = notebook
     }
     
     var body: some View {
         NavigationStack {
             ZStack {
-                List {
-                    // Page view here...
+                ScrollView {
+                    ForEach(0..<10) { _ in
+                        WritingPageView()
+                            .frame(width: CGFloat(PNConstants.DEFAULT_PAGE_WIDTH), height: CGFloat(PNConstants.DEFAULT_PAGE_HEIGHT))
+                            .border(Color.gray, width: 1)
+                    }
                 }
                 
                 if mainEditVM.showMarkupToolbar {

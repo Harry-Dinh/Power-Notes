@@ -46,11 +46,6 @@ struct NoteCreationView: View {
                         let notebook = noteCreationVM.createNotebook()  // Let's hope this is not creating a copy of the same one that was added to the primary vm array...
                         mainEditVM.currentNotebook = notebook
                         dismissModelAction.callAsFunction()
-                        
-                        if (!primaryVM.openNotebookOnDismiss) {
-                            primaryVM.openNotebookOnDismiss = true
-                            print("primaryVM.openNotebookOnDismiss: \(primaryVM.openNotebookOnDismiss)")
-                        }
                     }) {
                         Text("Create")
                             .fontWeight(.semibold)

@@ -13,7 +13,6 @@ class PrimaryVM {
     public static let instance = PrimaryVM()
     
     public var showNotebookCreationView = false
-    public var openNotebookOnDismiss = false
     
     public var currentUser = PNUser.PLACEHOLDER
     public var homeFolder = PNFolder("Home")

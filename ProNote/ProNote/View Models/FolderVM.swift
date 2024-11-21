@@ -13,4 +13,6 @@ class FolderVM {
     public static let instance = FolderVM()
     
     public var currentFolder = PNFolder.PLACEHOLDER
+    
+    public var openNotebook = false
 }

@@ -24,7 +24,7 @@ struct NotebookGridView: View {
                 .lineLimit(2)
                 .font(.subheadline)
         }
-        .frame(width: 300, height: 300)
+        .frame(width: 200, height: 200)
     }
 }
 

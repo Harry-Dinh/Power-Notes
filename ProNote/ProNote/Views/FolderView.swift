@@ -23,7 +23,7 @@ struct FolderView: View {
             VStack {
                 GeometryReader { geometry in
                     let screenWidth = geometry.size.width
-                    let gridColumns = Array(repeating: GridItem(.flexible(), spacing: 10), count: Int(screenWidth / 120))
+                    let gridColumns = Array(repeating: GridItem(.flexible(), spacing: 10), count: Int(screenWidth / 160))
                     
                     ScrollView {
                         // TODO: Want to add a section for folders up here just like in Apple Notes!
@@ -31,13 +31,22 @@ struct FolderView: View {
                         LazyVGrid(columns: gridColumns) {
                             ForEach(folderVM.currentFolder.notebooks) { notebook in
                                 NotebookGridView(notebook)
+                                    .onTapGesture {
+                                        mainEditVM.currentNotebook = notebook
+                                        folderVM.openNotebook.toggle()
+                                    }
+                                // TODO: Add a context menu here for rename, delete, move...
                             }
+                            
+//                            ForEach(0..<20) { _ in
+//                                NotebookGridView(PNNotebook.PLACEHOLDER)
+//                            }
                         }
                     }
-                    .padding()
                 }
             }
             .navigationTitle(folderVM.currentFolder.name)
+            .toolbarRole(.browser)
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
                     Button(action: {}) {
@@ -54,17 +63,9 @@ struct FolderView: View {
                 }
             }
             .sheet(isPresented: $primaryVM.showNotebookCreationView) {
-                print("Note creation view dismissed")
-                if primaryVM.openNotebookOnDismiss {
-                    print("Opening notebook now!")
-                    noteCreationVM.openNotebook.toggle()
-                    primaryVM.openNotebookOnDismiss = false
-                }
+                folderVM.openNotebook.toggle()
             } content: {
                 NoteCreationView()
-            }
-            .fullScreenCover(isPresented: $noteCreationVM.openNotebook) {
-                MainEditView(mainEditVM.currentNotebook)
             }
         }
     }
