@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct HomeSidebarView: View {
+    
+    @State private var primaryVM = PrimaryVM.instance
+    
     var body: some View {
         List {
-            NavigationLink(destination: EmptyView()) {
+            NavigationLink(destination: FolderView(primaryVM.homeFolder)) {
                 Label("Home", systemImage: "house")
+            }
+            
+            NavigationLink(destination: EmptyView()) {
+                Label("Bookmarks", systemImage: "bookmark")
             }
             
             NavigationLink(destination: EmptyView()) {
@@ -21,16 +28,11 @@ struct HomeSidebarView: View {
             Section {
                 EmptyView()
             } header: {
-                Text("My Folders")
+                Text("Pinned Folders")
             }
         }
         .listStyle(.sidebar)
         .navigationTitle("Power Notes")
-        .toolbar {
-            ToolbarItemGroup(placement: .topBarTrailing) {
-                Button(action: {}) { Image(systemName: "folder.badge.plus") }
-            }
-        }
     }
 }
 
