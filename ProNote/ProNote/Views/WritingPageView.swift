@@ -8,22 +8,16 @@
 import SwiftUI
 import PencilKit
 
-struct WritingPageView: UIViewRepresentable {
-    let canvasView = PKCanvasView()
-    
-    func makeUIView(context: Context) -> PKCanvasView {
-        // Configure view
-        canvasView.drawingPolicy = .anyInput
-        canvasView.isScrollEnabled = false
-        canvasView.backgroundColor = UIColor.systemBackground
-        return canvasView
-    }
-    
-    func updateUIView(_ uiView: PKCanvasView, context: Context) {
-        // No operations
-    }
-}
+// TODO: Might want to replace this standard PKCanvasView with a PDFPageView instead...
 
-#Preview {
-    WritingPageView()
+struct WritingPageView: UIViewControllerRepresentable {
+    let pdfURL: URL
+    
+    func makeUIViewController(context: Context) -> PDFWithAnnotationsVC {
+        PDFWithAnnotationsVC(pdfURL: pdfURL)
+    }
+    
+    func updateUIViewController(_ uiViewController: PDFWithAnnotationsVC, context: Context) {
+        // No operations... for now
+    }
 }
