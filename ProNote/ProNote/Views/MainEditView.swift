@@ -20,10 +20,14 @@ struct MainEditView: View {
         NavigationStack {
             ZStack {
                 ScrollView {
-                    ForEach(0..<10) { _ in
-                        WritingPageView()
-                            .frame(width: CGFloat(PNConstants.DEFAULT_PAGE_WIDTH), height: CGFloat(PNConstants.DEFAULT_PAGE_HEIGHT))
-                            .border(Color.gray, width: 1)
+                    ForEach(0..<2) { _ in
+                        if let pdfURL = Bundle.main.url(forResource: "defaultBlankPage", withExtension: "pdf") {
+                            WritingPageView(pdfURL: pdfURL)
+                                .padding(.vertical)
+                        } else {
+                            Text("Failed to load PDF")
+                                .foregroundStyle(.red)
+                        }
                     }
                 }
                 
