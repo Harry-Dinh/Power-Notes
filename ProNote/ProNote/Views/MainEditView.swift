@@ -19,16 +19,12 @@ struct MainEditView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                ScrollView {
-                    ForEach(0..<2) { _ in
-                        if let pdfURL = Bundle.main.url(forResource: "defaultBlankPage", withExtension: "pdf") {
-                            WritingPageView(pdfURL: pdfURL)
-                                .padding(.vertical)
-                        } else {
-                            Text("Failed to load PDF")
-                                .foregroundStyle(.red)
-                        }
-                    }
+                // Note: Don't add a scroll view or a VStack here, otherwise it will severely mess up the scrolling and zooming!
+                if let pdfURL = Bundle.main.url(forResource: "testPDF2", withExtension: "pdf") {
+                    PDFViewWrapper(pdfURL: pdfURL, showMarkupToolbar: $mainEditVM.showMarkupToolbar)
+                } else {
+                    Text("Failed to load PDF")
+                        .foregroundStyle(.red)
                 }
                 
                 if mainEditVM.showMarkupToolbar {
@@ -66,9 +62,14 @@ struct MainEditView: View {
                             Image(systemName: "character.textbox")
                         }
                         
-                        Button(action: {}) {
+                        Menu {
+                            Text("Placeholder")
+                        } label: {
                             Image(systemName: "doc.badge.plus")
+                        } primaryAction: {
+                            print("Add page!")
                         }
+                        .menuIndicator(.visible)
                     }
                 }
                 
