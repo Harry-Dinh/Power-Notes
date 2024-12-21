@@ -1,0 +1,43 @@
+title Power Notes Use Case #1: Creating a Notebook
+
+# Declaring actors and participants
+actor "User" as u
+participant "App's Home Screen" as home
+participant "Notebook Creation View" as cv
+participant "MainEditView" as mev
+
+# Sequences
+activate u
+u->home: taps + button on top right corner of toolbar
+activate home
+home-->u: displays menu of "add" options
+u->home: taps "New Notebook..." button
+home->cv: invoke the notebook creation view
+deactivate home
+activate cv
+cv->u: notebook creation view presented to the user
+u->cv: selects a template and enter notebook name
+u->cv: taps "Create" button on top right of sheet
+
+# If the user didn't enter a name for the notebook
+alt user didn't enter a name
+  cv->cv: provide the notebook with the default name ("Untitled Notebook")
+end
+
+# If the user didn't choose a template
+alt user didn't choose a template
+  cv->cv: selects the default template ("white-blank")
+end
+
+# User taps the "Cancel" button instead
+alt user taps the "Cancel" button instead
+  cv->cv: dismiss itself, no new notebook was created
+end
+
+cv->mev: initialize new view with notebook data
+activate mev
+cv->cv: dismisses itself
+deactivate cv
+mev->u: present view to the user
+deactivate mev
+deactivate u
