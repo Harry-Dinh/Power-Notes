@@ -13,6 +13,8 @@ class NoteCreationVM {
     public static let instance = NoteCreationVM()
     
     public var openNotebook = false
+    public var addCoverToggle = false
+    public var paperSizePickerOption = 0
     
     public var notebookName = "Untitled Notebook"
     
