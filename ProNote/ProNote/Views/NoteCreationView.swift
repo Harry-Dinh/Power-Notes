@@ -17,11 +17,10 @@ struct NoteCreationView: View {
     var body: some View {
         NavigationStack {
             Form {
-                HStack {
-                    NotebookTemplateHeaderView()
-                }
-                .listRowBackground(Color.clear)
+                NotebookTemplateHeaderView()
+                    .listRowBackground(Color.clear)
                 
+                // MARK: - Notebook Name Field
                 Section {
                     TextField("Notebook name", text: $noteCreationVM.notebookName)
                         .font(.title2)
@@ -55,9 +54,7 @@ struct NoteCreationView: View {
                 // MARK: - Front Cover Selector
                 if noteCreationVM.addCoverToggle {
                     Section {
-                        ScrollView(.horizontal) {
-                            // Add a TemplateSelectorView for front covers here...
-                        }
+                        TemplateSelectorView(templatesList: primaryVM.coverTemplatesThumbnails, pageType: .frontCover)
                     } header: {
                         Text("Front Cover")
                     } footer: {
@@ -68,7 +65,7 @@ struct NoteCreationView: View {
                 
                 // MARK: - Page Template Selector
                 Section {
-                    TemplateSelectorView(templatesList: primaryVM.templatesThumbnails)
+                    TemplateSelectorView(templatesList: primaryVM.templatesThumbnails, pageType: .writingPage)
                 } header: {
                     Text("Page Templates")
                 } footer: {
@@ -89,7 +86,6 @@ struct NoteCreationView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        print("Create notebook button pressed")
                         let notebook = noteCreationVM.createNotebook()  // Let's hope this is not creating a copy of the same one that was added to the primary vm array...
                         mainEditVM.currentNotebook = notebook
                         dismissModelAction.callAsFunction()
@@ -100,6 +96,7 @@ struct NoteCreationView: View {
                     .disabled(noteCreationVM.notebookName.isEmpty)
                 }
             }
+            .presentationSizing(.page)  // Give the sheet a bigger appearance than the standard sheet size
         }
     }
 }

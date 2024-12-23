@@ -28,6 +28,6 @@ struct NotebookGridView: View {
     }
 }
 
-#Preview {
-    NotebookGridView(PNNotebook.PLACEHOLDER)
-}
+//#Preview {
+//    NotebookGridView(PNNotebook.PLACEHOLDER)
+//}

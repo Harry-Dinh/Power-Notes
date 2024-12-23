@@ -6,37 +6,21 @@
 //
 
 import SwiftUI
+import PDFKit
 
 struct PDFViewWrapper: UIViewControllerRepresentable {
-    let pdfURL: URL
-    @Binding var showMarkupToolbar: Bool
+    private let document: PDFDocument?
+    
+    init(document: PDFDocument?) {
+        self.document = document
+    }
     
     func makeUIViewController(context: Context) -> PDFRenderer {
-        let pdfView = PDFRenderer(pdfURL: pdfURL, isExistingNotebook: false)
-        pdfView.isDrawingEnabled = showMarkupToolbar    // This ensures that drawing is disabled and the toolbar is hidden at the same time
+        let pdfView = PDFRenderer(document: document)
         return pdfView
     }
     
     func updateUIViewController(_ uiViewController: PDFRenderer, context: Context) {
-        uiViewController.isDrawingEnabled = showMarkupToolbar
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    class Coordinator: NSObject {
-        var parent: PDFViewWrapper
-        weak var pdfVC: PDFRenderer?
-        
-        init(_ parent: PDFViewWrapper) {
-            self.parent = parent
-        }
-        
-        func syncState(with isDrawingModeEnabled: Bool) {
-            DispatchQueue.main.async {
-                self.parent.showMarkupToolbar = isDrawingModeEnabled
-            }
-        }
+        // No operations
     }
 }

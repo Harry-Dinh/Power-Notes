@@ -10,8 +10,8 @@ import SwiftUI
 
 @Observable
 class MainEditVM {
-    public static let instance = MainEditVM ()
+    public static let instance = MainEditVM()
     
-    public var currentNotebook = PNNotebook.PLACEHOLDER    // This will be reassigned after the singleton is called
+    public var currentNotebook: PNNotebook?
     public var showMarkupToolbar = true
 }

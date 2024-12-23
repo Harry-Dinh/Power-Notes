@@ -15,6 +15,8 @@ class PrimaryVM {
     public static let instance = PrimaryVM()
     public var templateURLs: [URL] = []
     public var templatesThumbnails: [UIImage] = []
+    public var coverTemplateURLs: [URL] = []
+    public var coverTemplatesThumbnails: [UIImage] = []
     
     // MARK: - SwiftUI States
     public var showNotebookCreationView = false
@@ -48,7 +50,8 @@ class PrimaryVM {
         
         // Map the data from the fetched directory into the member templatesURLs array
         templateURLs = directory.map { fileName in
-            URL(fileURLWithPath: directoryPath).appending(path: fileName)   // Hopefully this is the URL PDFKit is looking for...
+            print("Is this even running?")
+            return URL(fileURLWithPath: directoryPath).appending(path: fileName)   // Hopefully this is the URL PDFKit is looking for...
         }
         
         print("Templates preload completed")

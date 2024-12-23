@@ -10,10 +10,12 @@ import SwiftUI
 struct TemplateSelectorView: View {
     
     private var templatesList: [UIImage]
+    private var pageType: TemplateType
     @State private var noteCreationVM = NoteCreationVM.instance
     
-    init(templatesList: [UIImage]) {
+    init(templatesList: [UIImage], pageType: TemplateType) {
         self.templatesList = templatesList
+        self.pageType = pageType
     }
     
     var body: some View {
@@ -27,11 +29,18 @@ struct TemplateSelectorView: View {
                         .frame(width: 250, height: 250)
                         .padding(.vertical)
                         .onTapGesture {
-                            // Assign the preview at the top to let the user see the selected template
-                            noteCreationVM.selectedTemplate = templatesList[i]
+                            /*
+                             1. Set the preview template at the top of the page
+                             2. Set the page index to load the actual PDF file into the main edit view
+                             */
                             
-                            // This is used for selecting the URL for the selected PDF from the array inside PrimaryVM
-                            noteCreationVM.selectedTemplateIndex = i
+                            if pageType == .writingPage {
+                                noteCreationVM.selectedTemplate = templatesList[i]
+                                noteCreationVM.selectedTemplateIndex = i
+                            } else {
+                                noteCreationVM.selectedCover = templatesList[i]
+                                noteCreationVM.selectedCoverIndex = i
+                            }
                         }
                 }
             }
