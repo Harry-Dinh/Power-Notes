@@ -15,6 +15,8 @@ class NoteCreationVM {
     public var openNotebook = false
     public var addCoverToggle = false
     public var paperSizePickerOption = 0
+    public var selectedTemplate: UIImage?
+    public var selectedTemplateIndex: Int?
     
     public var notebookName = "Untitled Notebook"
     

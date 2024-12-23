@@ -18,11 +18,8 @@ struct NoteCreationView: View {
         NavigationStack {
             Form {
                 HStack {
-                    Spacer()
-                    Image(systemName: "text.book.closed.fill")
-                    Spacer()
+                    NotebookTemplateHeaderView()
                 }
-                .font(.system(size: 100))
                 .listRowBackground(Color.clear)
                 
                 Section {
@@ -32,6 +29,7 @@ struct NoteCreationView: View {
                         .multilineTextAlignment(.center)
                 }
                 
+                // MARK: - Notebook Customizations Section
                 Section("Notebook Customizations") {
                     Picker("Paper Size", selection: $noteCreationVM.paperSizePickerOption) {
                         Section("Preset") {
@@ -54,19 +52,23 @@ struct NoteCreationView: View {
                     }
                 }
                 
-                Section {
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 10) {
-                            ForEach(primaryVM.templatesThumbnails, id: \.self) { image in
-                                // TODO: Render successfully but has no background!
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 250, height: 250)
-                                    .padding(.vertical)
-                            }
+                // MARK: - Front Cover Selector
+                if noteCreationVM.addCoverToggle {
+                    Section {
+                        ScrollView(.horizontal) {
+                            // Add a TemplateSelectorView for front covers here...
                         }
+                    } header: {
+                        Text("Front Cover")
+                    } footer: {
+                        Text("Credit page websites here...")
+                            .italic()
                     }
+                }
+                
+                // MARK: - Page Template Selector
+                Section {
+                    TemplateSelectorView(templatesList: primaryVM.templatesThumbnails)
                 } header: {
                     Text("Page Templates")
                 } footer: {
@@ -75,6 +77,7 @@ struct NoteCreationView: View {
             }
             .navigationTitle("Create New Notebook")
             .navigationBarTitleDisplayMode(.inline)
+            .interactiveDismissDisabled()
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: {
@@ -97,7 +100,6 @@ struct NoteCreationView: View {
                     .disabled(noteCreationVM.notebookName.isEmpty)
                 }
             }
-            .interactiveDismissDisabled()
         }
     }
 }
