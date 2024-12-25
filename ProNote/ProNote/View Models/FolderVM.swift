@@ -15,4 +15,6 @@ class FolderVM {
     public var currentFolder = PNFolder.PLACEHOLDER
     
     public var openNotebook = false
+    public var selectedViewOption = 0
+    public var selectedSortOption = 2
 }

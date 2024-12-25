@@ -97,7 +97,6 @@ struct MainEditView: View {
                         .clipShape(Circle())
                         .onChange(of: mainEditVM.showMarkupToolbar) {
                             // Ensures the document view moves down when the tool picker is enabled and moves back up when hidden
-                            print("mainEditVM.showMarkupToolbar value changed")
                             if mainEditVM.showMarkupToolbar {
                                 withAnimation(.easeIn) {
                                     mainEditVM.documentViewOffsetAmount = 50
