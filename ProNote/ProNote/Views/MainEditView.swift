@@ -27,6 +27,7 @@ struct MainEditView: View {
                     // Note: Don't add a scroll view or a VStack here, otherwise it will severely mess up the scrolling and zooming!
                     if let currentNotebook = mainEditVM.currentNotebook, let document = currentNotebook.document {
                         PDFViewWrapper(document: document)
+                            .offset(y: mainEditVM.documentViewOffsetAmount)
                     } else {
                         Text("Failed to load PDF")
                             .foregroundStyle(.red)
@@ -36,7 +37,7 @@ struct MainEditView: View {
                     if mainEditVM.showMarkupToolbar {
                         GeometryReader { geometry in
                             CustomMarkupToolbar()
-                                .position(x: geometry.size.width / 2, y: geometry.safeAreaInsets.top + 100)
+                                .position(x: geometry.size.width / 2, y: geometry.safeAreaInsets.top + 95)
                         }
                         .ignoresSafeArea(edges: .top)
                     }
@@ -94,6 +95,19 @@ struct MainEditView: View {
                             Image(systemName: "pencil.tip.crop.circle")
                         }
                         .clipShape(Circle())
+                        .onChange(of: mainEditVM.showMarkupToolbar) {
+                            // Ensures the document view moves down when the tool picker is enabled and moves back up when hidden
+                            print("mainEditVM.showMarkupToolbar value changed")
+                            if mainEditVM.showMarkupToolbar {
+                                withAnimation(.easeIn) {
+                                    mainEditVM.documentViewOffsetAmount = 50
+                                }
+                            } else {
+                                withAnimation(.easeOut) {
+                                    mainEditVM.documentViewOffsetAmount = 0
+                                }
+                            }
+                        }
                         
                         Button(action: {}) {
                             Image(systemName: "bookmark")

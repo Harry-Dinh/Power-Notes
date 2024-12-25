@@ -12,10 +12,10 @@ struct CustomMarkupToolbar: View {
         // TODO: Customize this a bit later, just need to get the functionality working first!
         ZStack {
             Rectangle()
-                .border(.secondary, width: 2)
-                .foregroundStyle(.background, .regularMaterial)
+                .foregroundStyle(.bar)
+                .border(width: 0.5, edges: [.bottom, .top], color: .secondary)  // This custom modifier only changes the colour of the top and bottom edges
             
-            HStack(spacing: 100) {
+            HStack {
                 Spacer()
                 
                 Group {
@@ -25,11 +25,15 @@ struct CustomMarkupToolbar: View {
                             .frame(width: 25, height: 25)
                     }
                     
+                    Spacer()
+                    
                     Button(action: {}) {
                         Image("custom-highlighter")
                             .resizable()
                             .frame(width: 25, height: 25)
                     }
+                    
+                    Spacer()
                     
                     Button(action: {}) {
                         Image("custom-pencil")
@@ -37,11 +41,15 @@ struct CustomMarkupToolbar: View {
                             .frame(width: 25, height: 25)
                     }
                     
+                    Spacer()
+                    
                     Button(action: {}) {
                         Image("custom-eraser")
                             .resizable()
                             .frame(width: 25, height: 25)
                     }
+                    
+                    Spacer()
                     
                     Button(action: {}) {
                         Image("custom-lasso")
@@ -49,11 +57,19 @@ struct CustomMarkupToolbar: View {
                             .frame(width: 25, height: 25)
                     }
                     
+                    Spacer()
+                    
                     Button(action: {}) {
                         Image("custom-ruler")
                             .resizable()
                             .frame(width: 30, height: 30)
                     }
+                    
+                    Spacer()
+                    
+                    Divider()
+                    
+                    Text("Tool-specific actions here...")
                 }
                 .foregroundStyle(Color.primary)
                 

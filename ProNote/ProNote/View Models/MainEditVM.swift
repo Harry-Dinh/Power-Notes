@@ -14,4 +14,5 @@ class MainEditVM {
     
     public var currentNotebook: PNNotebook?
     public var showMarkupToolbar = true
+    public var documentViewOffsetAmount: CGFloat = 50
 }
