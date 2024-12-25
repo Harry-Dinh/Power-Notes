@@ -70,13 +70,12 @@ struct MainEditView: View {
                             }
                             
                             Menu {
-                                Text("Placeholder")
+                                NewPageOverlayView()
                             } label: {
                                 Image(systemName: "doc.badge.plus")
                             } primaryAction: {
-                                print("Add page!")
+                                mainEditVM.quicklyInsertPageAtEnd()
                             }
-                            .menuIndicator(.visible)
                         }
                     }
                     
