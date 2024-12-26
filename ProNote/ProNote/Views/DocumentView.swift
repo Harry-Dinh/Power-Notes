@@ -12,22 +12,24 @@ import PencilKit
 struct DocumentView: UIViewRepresentable {
     
     private var pdfView = PDFView()
-    @Binding var document: PDFDocument?
+    @Binding var documentWrapper: PDFDocumentWrapper
     
-    init(document: Binding<PDFDocument?>) {
-        self._document = document
+    init(documentWrapper: Binding<PDFDocumentWrapper>) {
+        self._documentWrapper = documentWrapper
     }
     
     // MARK: - Make UIView Function
     func makeUIView(context: Context) -> PDFView {
         // Configure the PDF view
         pdfView.delegate = context.coordinator
+        pdfView.pageOverlayViewProvider = context.coordinator
         pdfView.autoScales = true
         pdfView.displayMode = .singlePageContinuous
         pdfView.displayDirection = .vertical
         pdfView.displaysPageBreaks = true
         pdfView.usePageViewController(false)
         pdfView.isInMarkupMode = true
+        pdfView.document = documentWrapper.document
         return pdfView
     }
     

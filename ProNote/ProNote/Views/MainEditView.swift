@@ -18,6 +18,12 @@ struct MainEditView: View {
     // Default initializer (call when opening existing note)
     init(_ notebook: PNNotebook) {
         self.mainEditVM.currentNotebook = notebook
+        
+        // Unwrap the document as the view is initializing
+        guard let document = notebook.document else {
+            fatalError("Cannot unwrap document")
+        }
+        self.mainEditVM.currentDocumentWrapper = PDFDocumentWrapper(document)
     }
     
     var body: some View {
@@ -25,14 +31,8 @@ struct MainEditView: View {
             NavigationStack {
                 ZStack {
                     // Note: Don't add a scroll view or a VStack here, otherwise it will severely mess up the scrolling and zooming!
-                    if let currentNotebook = mainEditVM.currentNotebook, let document = currentNotebook.document {
-                        PDFViewWrapper(document: document)
-                            .offset(y: mainEditVM.documentViewOffsetAmount)
-                    } else {
-                        Text("Failed to load PDF")
-                            .foregroundStyle(.red)
-                            .font(.title2)
-                    }
+                    DocumentView(documentWrapper: $mainEditVM.currentDocumentWrapper)
+                        .offset(y: mainEditVM.documentViewOffsetAmount)
                     
                     if mainEditVM.showMarkupToolbar {
                         GeometryReader { geometry in

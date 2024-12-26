@@ -17,6 +17,7 @@ class MainEditVM {
     public var documentViewOffsetAmount: CGFloat = 50
     public var showTemplatePicker = false
     public var pageCount = 0
+    public var currentDocumentWrapper = PDFDocumentWrapper(nil)     // This will be with a document before the view loads
     
     // TODO: This function works but the view doesn't update along with it...
     public func quicklyInsertPageAtEnd() {
