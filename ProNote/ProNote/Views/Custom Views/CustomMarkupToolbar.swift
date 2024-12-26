@@ -8,53 +8,24 @@
 import SwiftUI
 
 struct CustomMarkupToolbar: View {
+    
+//    @State private var primaryVM = PrimaryVM.instance
+    @State private var toolbarVM = CustomMarkupToolbarVM.instance
+    
     var body: some View {
-        // TODO: Customize this a bit later, just need to get the functionality working first!
         ZStack {
             Rectangle()
                 .foregroundStyle(.bar)
                 .border(width: 0.5, edges: [.bottom, .top], color: .secondary)  // This custom modifier only changes the colour of the top and bottom edges
             
-            HStack {
-                Spacer()
+            HStack(alignment: .center) {
                 
                 Group {
-                    Button(action: {}) {
-                        Image("custom-fountain-pen")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {}) {
-                        Image("custom-highlighter")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {}) {
-                        Image("custom-pencil")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {}) {
-                        Image("custom-eraser")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {}) {
-                        Image("custom-lasso")
-                            .resizable()
-                            .frame(width: 25, height: 25)
+                    ForEach($toolbarVM.toggleButtons) { $tool in
+                        Spacer()
+                        CustomToolButton(toggle: $tool) {
+                            toolbarVM.selectToggle(id: tool.id)
+                        }
                     }
                     
                     Spacer()
@@ -62,7 +33,8 @@ struct CustomMarkupToolbar: View {
                     Button(action: {}) {
                         Image("custom-ruler")
                             .resizable()
-                            .frame(width: 30, height: 30)
+                            .scaledToFit()
+                            .frame(width: 27, height: 27)
                     }
                     
                     Spacer()
