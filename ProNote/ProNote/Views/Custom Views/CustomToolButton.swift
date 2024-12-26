@@ -7,29 +7,30 @@
 
 import SwiftUI
 
-struct CustomToolButton: View {
-    @Binding var toggle: CustomToolButtonModel
-    var changeToolAction: () -> Void
+struct ToolToggle: View {
+    let tool: CustomMarkupToolbarVM.ToolButton
+    @Binding var selectedTool: CustomMarkupToolbarVM.ToolButton
+    var toolAction: () -> Void
     
     var body: some View {
-        Toggle(isOn: $toggle.isSelected) {
-            Image(toggle.iconName)
-                .resizable()
-                .frame(width: 25, height: 25)
-        }
-        .toggleStyle(.button)
-        .foregroundStyle(.primary)
-        .onChange(of: toggle.isSelected) {
-            changeToolAction()
-        }
-        .onTapGesture {
-            if toggle.isSelected {
-                // TODO: Open tool context menu
-                print("Open tool context menu")
+        Button(action: {
+            if selectedTool == tool {
+                toolAction()
             } else {
-                print("Tool select action")
-                changeToolAction()
+                selectedTool = tool
+                // TODO: Also change the actual selected tool here...
             }
+        }) {
+            Image(tool.rawValue)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 25, height: 25)
+                .foregroundStyle(.primary)
+                .padding(7)
+                .background {
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundStyle(selectedTool == tool ? Color.accentColor.opacity(0.25) : Color.clear)
+                }
         }
     }
 }

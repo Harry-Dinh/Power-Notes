@@ -12,17 +12,22 @@ class CustomMarkupToolbarVM {
     
     public static let instance = CustomMarkupToolbarVM()
     
-    public var toggleButtons: [CustomToolButtonModel] = [
-        CustomToolButtonModel(iconName: "custom-fountain-pen", isSelected: true),
-        CustomToolButtonModel(iconName: "custom-highlighter", isSelected: false),
-        CustomToolButtonModel(iconName: "custom-pencil", isSelected: false),
-        CustomToolButtonModel(iconName: "custom-eraser", isSelected: false),
-        CustomToolButtonModel(iconName: "custom-lasso", isSelected: false)
+    public enum ToolButton: String, CaseIterable {
+        case fountainPen = "custom-fountain-pen"
+        case highlighter = "custom-highlighter"
+        case pencil = "custom-pencil"
+        case eraser = "custom-eraser"
+        case lasso = "custom-lasso"
+    }
+    
+    public var toggleToolPropertiesView: [Bool] = [
+        false,
+        false,
+        false,
+        false,
+        false
     ]
     
-    public func selectToggle(id: UUID) {
-        for i in toggleButtons.indices {
-            toggleButtons[i].isSelected = toggleButtons[i].id == id
-        }
-    }
+    public var selectedTool: ToolButton = .fountainPen
+    public var showRuler = false
 }

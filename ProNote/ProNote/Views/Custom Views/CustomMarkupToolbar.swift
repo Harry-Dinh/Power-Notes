@@ -11,42 +11,42 @@ struct CustomMarkupToolbar: View {
     
 //    @State private var primaryVM = PrimaryVM.instance
     @State private var toolbarVM = CustomMarkupToolbarVM.instance
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ZStack {
             Rectangle()
-                .foregroundStyle(.bar)
+                .foregroundStyle(.thickMaterial)
                 .border(width: 0.5, edges: [.bottom, .top], color: .secondary)  // This custom modifier only changes the colour of the top and bottom edges
             
             HStack(alignment: .center) {
                 
-                Group {
-                    ForEach($toolbarVM.toggleButtons) { $tool in
-                        Spacer()
-                        CustomToolButton(toggle: $tool) {
-                            toolbarVM.selectToggle(id: tool.id)
-                        }
-                    }
-                    
+                ForEach(CustomMarkupToolbarVM.ToolButton.allCases, id: \.self) { tool in
                     Spacer()
-                    
-                    Button(action: {}) {
-                        Image("custom-ruler")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 27, height: 27)
+                    ToolToggle(tool: tool, selectedTool: $toolbarVM.selectedTool) {
+                        // Open specific tool actions here...
                     }
-                    
-                    Spacer()
-                    
-                    Divider()
-                    
-                    Text("Tool-specific actions here...")
                 }
-                .foregroundStyle(Color.primary)
+                
+                Spacer()
+                
+                Toggle(isOn: $toolbarVM.showRuler) {
+                    Image("custom-ruler")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 27, height: 27)
+                }
+                .toggleStyle(.button)
+                
+                Spacer()
+                
+                Divider()
+                
+                Text("Tool-specific actions here...")
                 
                 Spacer()
             }
+            .foregroundStyle(.primary)
         }
         .frame(height: 50)
     }
