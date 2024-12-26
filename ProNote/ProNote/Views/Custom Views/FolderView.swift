@@ -35,7 +35,6 @@ struct FolderView: View {
                                         mainEditVM.currentNotebook = notebook
                                         folderVM.openNotebook.toggle()
                                     }
-                                // TODO: Add a context menu here for rename, delete, move...
                             }
                             
 //                            ForEach(0..<20) { _ in
@@ -49,17 +48,49 @@ struct FolderView: View {
             .toolbarRole(.browser)
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
-                    Button(action: {}) {
-                        Image(systemName: "folder.badge.plus")
+                    Menu {
+                        Section("View Options") {
+                            Picker(selection: $folderVM.selectedViewOption) {
+                                Label("Grid", systemImage: "square.grid.2x2").tag(0)
+                                Label("List", systemImage: "list.bullet").tag(1)
+                            } label: {
+                                Text("File Browser Viewing Mode")
+                            }
+                        }
+                        
+                        Section("Sort By...") {
+                            Picker(selection: $folderVM.selectedSortOption) {
+                                Text("Name").tag(0)
+                                Text("Date Created").tag(1)
+                                Text("Date Edited").tag(2)
+                            } label: {
+                                Text("Sorting Mode")
+                            }
+                        }
+
+                    } label: {
+                        Image(systemName: "square.grid.2x2")
                     }
+                    .menuIndicator(.visible)
                     
                     Menu {
-                        Button("New Notebook...") {
+                        Button(action: {}) {
+                            Label("New Quick Note", systemImage: "note.text")
+                        }
+                        
+                        Button(action: {}) {
+                            Label("New Folder...", systemImage: "folder.badge.plus")
+                        }
+                        
+                        Button(action: {
                             primaryVM.showNotebookCreationView.toggle()
+                        }) {
+                            Label("New Notebook...", systemImage: "text.book.closed")
                         }
                     } label: {
                         Image(systemName: "plus")
                     }
+                    .menuIndicator(.visible)
                 }
             }
             .sheet(isPresented: $primaryVM.showNotebookCreationView) {

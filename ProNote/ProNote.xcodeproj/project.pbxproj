@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		211554D92D17A2B10076B6E8 /* Templates in Resources */ = {isa = PBXBuildFile; fileRef = 211554D82D17A2B10076B6E8 /* Templates */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		211554D82D17A2B10076B6E8 /* Templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Templates; sourceTree = "<group>"; };
 		21F5DC212CE5304900DE7736 /* ProNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProNote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -32,6 +37,7 @@
 		21F5DC182CE5304800DE7736 = {
 			isa = PBXGroup;
 			children = (
+				211554D82D17A2B10076B6E8 /* Templates */,
 				21F5DC232CE5304900DE7736 /* ProNote */,
 				21F5DC222CE5304900DE7736 /* Products */,
 			);
@@ -109,6 +115,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				211554D92D17A2B10076B6E8 /* Templates in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,7 +258,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"ProNote/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "ProNote/Preview\\ Content";
 				DEVELOPMENT_TEAM = W29Q2GKBT5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -283,7 +290,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"ProNote/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "ProNote/Preview\\ Content";
 				DEVELOPMENT_TEAM = W29Q2GKBT5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

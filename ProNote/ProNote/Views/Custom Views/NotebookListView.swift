@@ -24,6 +24,6 @@ struct NotebookListView: View {
     }
 }
 
-#Preview {
-    NotebookListView(PNNotebook.PLACEHOLDER)
-}
+//#Preview {
+//    NotebookListView(PNNotebook.PLACEHOLDER)
+//}

@@ -20,7 +20,9 @@ struct HomeView: View {
             FolderView(primaryVM.homeFolder)
         }
         .fullScreenCover(isPresented: $folderVM.openNotebook) {
-            MainEditView(mainEditVM.currentNotebook)
+            if let notebook = mainEditVM.currentNotebook {
+                MainEditView(notebook)
+            }
         }
     }
 }

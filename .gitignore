@@ -1,3 +1,8 @@
+# System ignore
 **/.DS_Store
-ProNote/ProNote.xcodeproj/project.xcworkspace/xcuserdata/
 **/testPDF2.pdf
+
+# Ignore the UserInterfaceState.xcuserstate in Xcode
+xcuserdata
+xcuserdaa/*
+*.xcuserstate
