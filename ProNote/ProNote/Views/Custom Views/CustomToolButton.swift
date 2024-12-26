@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import PencilKit
 
 struct ToolToggle: View {
     let tool: CustomMarkupToolbarVM.ToolButton
     @Binding var selectedTool: CustomMarkupToolbarVM.ToolButton
+    @Binding var selectedToolData: PKTool
     var toolAction: () -> Void
     
     var body: some View {
@@ -17,8 +19,24 @@ struct ToolToggle: View {
             if selectedTool == tool {
                 toolAction()
             } else {
+                switch tool {
+                    case .fountainPen:
+                        print("Switched to pen tool")
+                        selectedToolData = PKInkingTool(.pen, color: .black, width: 5)
+                    case .highlighter:
+                        print("Switched to highlighter tool")
+                        selectedToolData = PKInkingTool(.marker, color: .systemYellow, width: 5)
+                    case .pencil:
+                        print("Switched to pencil tool")
+                        selectedToolData = PKInkingTool(.pencil, color: .systemBlue, width: 5)
+                    case .eraser:
+                        print("Switched to eraser")
+                        selectedToolData = PKEraserTool(.vector, width: 3)
+                    case .lasso:
+                        print("Switched to lasso tool")
+                        selectedToolData = PKLassoTool()
+                }
                 selectedTool = tool
-                // TODO: Also change the actual selected tool here...
             }
         }) {
             Image(tool.rawValue)

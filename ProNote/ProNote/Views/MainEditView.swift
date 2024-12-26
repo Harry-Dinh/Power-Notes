@@ -10,6 +10,7 @@ import SwiftUI
 struct MainEditView: View {
     
     @State private var mainEditVM = MainEditVM.instance
+    @State private var toolbarVM = CustomMarkupToolbarVM.instance
     @Environment(\.dismiss) var dismiss
     
     // Creation initializer (call after creating new note)
@@ -30,8 +31,7 @@ struct MainEditView: View {
         if let notebook = mainEditVM.currentNotebook {
             NavigationStack {
                 ZStack {
-                    // Note: Don't add a scroll view or a VStack here, otherwise it will severely mess up the scrolling and zooming!
-                    DocumentView(documentWrapper: $mainEditVM.currentDocumentWrapper)
+                    DocumentView(documentWrapper: $mainEditVM.currentDocumentWrapper, selectedTool: $toolbarVM.selectedToolData)
                         .offset(y: mainEditVM.documentViewOffsetAmount)
                     
                     if mainEditVM.showMarkupToolbar {

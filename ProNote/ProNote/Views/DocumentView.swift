@@ -13,9 +13,11 @@ struct DocumentView: UIViewRepresentable {
     
     private var pdfView = PDFView()
     @Binding var documentWrapper: PDFDocumentWrapper
+    @Binding var selectedTool: PKTool
     
-    init(documentWrapper: Binding<PDFDocumentWrapper>) {
+    init(documentWrapper: Binding<PDFDocumentWrapper>, selectedTool: Binding<PKTool>) {
         self._documentWrapper = documentWrapper
+        self._selectedTool = selectedTool
     }
     
     // MARK: - Make UIView Function
@@ -35,7 +37,12 @@ struct DocumentView: UIViewRepresentable {
     
     // MARK: - Update UIView Function
     func updateUIView(_ uiView: PDFView, context: Context) {
-        // No operations yet...
+        guard let canvasView = context.coordinator.canvasView else {
+            print("Unable to get reference to the canvas view")
+            return
+        }
+        print("Canvas view tool updated")
+        canvasView.tool = selectedTool
     }
     
     // MARK: - Make Coordinator Function
@@ -46,6 +53,7 @@ struct DocumentView: UIViewRepresentable {
     // MARK: - Coordinator Class
     class Coordinator: NSObject, PDFViewDelegate {
         var parent: DocumentView
+        var canvasView: PKCanvasView!
         
         init(_ parent: DocumentView) {
             self.parent = parent
@@ -58,7 +66,7 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
     
     // Set up and overlay the canvas view over each PDF file
     func pdfView(_ view: PDFView, overlayViewFor page: PDFPage) -> UIView? {
-        let canvasView = PKCanvasView()
+        canvasView = PKCanvasView()
         canvasView.delegate = self
         
         let pageBounds = page.bounds(for: .mediaBox)
@@ -73,7 +81,7 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
         canvasView.overrideUserInterfaceStyle = .light
         canvasView.isScrollEnabled = false
         canvasView.isDrawingEnabled = true
-        canvasView.tool = PKInkingTool(.pen, color: .black, width: 5)
+        canvasView.tool = parent.selectedTool
         
         // Add a double tap gesture recognizer to zoom the document to its width
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTapToZoomGesture))

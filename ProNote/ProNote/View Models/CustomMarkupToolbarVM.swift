@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PencilKit
 
 @Observable
 class CustomMarkupToolbarVM {
@@ -28,6 +29,7 @@ class CustomMarkupToolbarVM {
         false
     ]
     
+    public var selectedToolData: PKTool = PKInkingTool(.pen, color: .black, width: 5)
     public var selectedTool: ToolButton = .fountainPen
     public var showRuler = false
 }

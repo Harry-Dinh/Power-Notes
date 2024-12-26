@@ -23,7 +23,7 @@ struct CustomMarkupToolbar: View {
                 
                 ForEach(CustomMarkupToolbarVM.ToolButton.allCases, id: \.self) { tool in
                     Spacer()
-                    ToolToggle(tool: tool, selectedTool: $toolbarVM.selectedTool) {
+                    ToolToggle(tool: tool, selectedTool: $toolbarVM.selectedTool, selectedToolData: $toolbarVM.selectedToolData) {
                         // Open specific tool actions here...
                     }
                 }
