@@ -8,12 +8,14 @@
 import SwiftUI
 import PDFKit
 import PencilKit
+import Foundation
 
 struct DocumentView: UIViewRepresentable {
     
     private var pdfView = PDFView()
     @Binding var documentWrapper: PDFDocumentWrapper
     @Binding var selectedTool: PKTool
+    @Environment(\.undoManager) var undoManager
     
     init(documentWrapper: Binding<PDFDocumentWrapper>, selectedTool: Binding<PKTool>) {
         self._documentWrapper = documentWrapper
@@ -37,12 +39,7 @@ struct DocumentView: UIViewRepresentable {
     
     // MARK: - Update UIView Function
     func updateUIView(_ uiView: PDFView, context: Context) {
-        guard let canvasView = context.coordinator.canvasView else {
-            print("Unable to get reference to the canvas view")
-            return
-        }
-        print("Canvas view tool updated")
-        canvasView.tool = selectedTool
+        updateSelectedTool(context)
     }
     
     // MARK: - Make Coordinator Function
@@ -58,6 +55,16 @@ struct DocumentView: UIViewRepresentable {
         init(_ parent: DocumentView) {
             self.parent = parent
         }
+    }
+    
+    // MARK: - Helper Functions
+    
+    private func updateSelectedTool(_ context: Context) {
+        guard let canvasView = context.coordinator.canvasView else {
+            print("Cannot unwrap canvas view")
+            return
+        }
+        canvasView.tool = selectedTool
     }
 }
 
@@ -78,7 +85,7 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
         // Configure the canvas view
         canvasView.drawingPolicy = .default
         canvasView.backgroundColor = .clear
-        canvasView.overrideUserInterfaceStyle = .light
+        canvasView.overrideUserInterfaceStyle = .light  // This ensures that the black ink colour doesn't change to white when switching to dark mode
         canvasView.isScrollEnabled = false
         canvasView.isDrawingEnabled = true
         canvasView.tool = parent.selectedTool
@@ -91,7 +98,30 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
         return canvasView
     }
     
+    func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
+        registerUndoRedoActions(canvasView)
+    }
+    
+    // MARK: - Coordinator Helper Functions
+    
     @objc func doubleTapToZoomGesture() {
         parent.pdfView.scaleFactor = parent.pdfView.scaleFactorForSizeToFit
+    }
+    
+    private func registerUndoRedoActions(_ canvasView: PKCanvasView) {
+        print("registerUndoRedoActions() called")
+        guard let undoManager = parent.undoManager else {
+            print("Cannot unwrap undo manager from parent")
+            return
+        }
+        
+        undoManager.registerUndo(withTarget: canvasView) { target in
+            let previousDrawing = canvasView.drawing
+            canvasView.drawing = previousDrawing
+            
+            undoManager.registerUndo(withTarget: target) { target in
+                canvasView.drawing = previousDrawing
+            }
+        }
     }
 }

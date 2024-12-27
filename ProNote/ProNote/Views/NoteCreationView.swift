@@ -93,7 +93,7 @@ struct NoteCreationView: View {
                         Text("Create")
                             .fontWeight(.semibold)
                     }
-                    .disabled(noteCreationVM.notebookName.isEmpty)
+                    .disabled(noteCreationVM.notebookName.isEmpty && noteCreationVM.selectedTemplate == nil)
                 }
             }
             .presentationSizing(.page)  // Give the sheet a bigger appearance than the standard sheet size

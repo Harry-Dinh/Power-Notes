@@ -74,7 +74,11 @@ struct FolderView: View {
                     .menuIndicator(.visible)
                     
                     Menu {
-                        Button(action: {}) {
+                        Button(action: {
+                            let quickNote = noteCreationVM.createQuickNote()
+                            mainEditVM.currentNotebook = quickNote
+                            folderVM.openNotebook.toggle()
+                        }) {
                             Label("New Quick Note", systemImage: "note.text")
                         }
                         
@@ -93,6 +97,9 @@ struct FolderView: View {
                     .menuIndicator(.visible)
                 }
             }
+            .fullScreenCover(isPresented: $folderVM.openNotebook, content: {
+                MainEditView()
+            })
             .sheet(isPresented: $primaryVM.showNotebookCreationView) {
                 folderVM.openNotebook.toggle()
             } content: {

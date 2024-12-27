@@ -78,6 +78,16 @@ class NoteCreationVM {
         return newNotebook
     }
     
+    public func createQuickNote() -> PNNotebook {
+        let primaryVM = PrimaryVM.instance
+        let templateURL = primaryVM.templateURLs[1]
+        let blankPageDoc = PDFDocument(url: templateURL)
+        var newQuickNote = PNNotebook("New Quick Note")
+        newQuickNote.document = blankPageDoc
+        primaryVM.homeFolder.notebooks.append(newQuickNote)
+        return newQuickNote
+    }
+    
     private func getTemplateURL(for pageType: TemplateType) -> URL? {
         print("NoteCreationVM.getTemplateURL() called")
         let primaryVM = PrimaryVM.instance

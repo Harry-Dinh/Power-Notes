@@ -6,17 +6,19 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct MainEditView: View {
     
     @State private var mainEditVM = MainEditVM.instance
     @State private var toolbarVM = CustomMarkupToolbarVM.instance
     @Environment(\.dismiss) var dismiss
+    @Environment(\.undoManager) var undoManager
     
-    // Creation initializer (call after creating new note)
+    // Creation initializer (call after opening existing notes or creating quick notes)
     init() {}
     
-    // Default initializer (call when opening existing note)
+    // Default initializer (call when creating a new note)
     init(_ notebook: PNNotebook) {
         self.mainEditVM.currentNotebook = notebook
         
@@ -80,16 +82,25 @@ struct MainEditView: View {
                     }
                     
                     ToolbarItemGroup(placement: .primaryAction) {
+                        
+                        // MARK: - Undo/Redo Actions
                         ControlGroup {
-                            Button(action: {}) {
+                            Button(action: {
+                                undoManager?.undo()
+                            }) {
                                 Image(systemName: "arrow.uturn.backward.circle")
                             }
+                            .disabled(!(undoManager?.canUndo ?? false))
                             
-                            Button(action: {}) {
+                            Button(action: {
+                                undoManager?.redo()
+                            }) {
                                 Image(systemName: "arrow.uturn.forward.circle")
                             }
+                            .disabled(!(undoManager?.canRedo ?? false))
                         }
                         
+                        // MARK: - Toggle Writing Mode
                         Toggle(isOn: $mainEditVM.showMarkupToolbar) {
                             Image(systemName: "pencil.tip.crop.circle")
                         }
@@ -106,6 +117,8 @@ struct MainEditView: View {
                                 }
                             }
                         }
+                        
+                        // MARK: - Other Actions
                         
                         Button(action: {}) {
                             Image(systemName: "bookmark")
@@ -133,7 +146,7 @@ struct MainEditView: View {
                     }
                     
                     Button(action: {}) {
-                        Image(systemName: "magnifyingglass")
+                        Label("Search Document", systemImage: "magnifyingglass")
                     }
                     
                     Button(action: {}) {

@@ -9,6 +9,7 @@ import SwiftUI
 
 @Observable
 class MainEditVM {
+    
     public static let instance = MainEditVM()
     
     public var currentNotebook: PNNotebook?
