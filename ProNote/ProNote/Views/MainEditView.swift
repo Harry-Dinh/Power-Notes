@@ -33,7 +33,7 @@ struct MainEditView: View {
         if let notebook = mainEditVM.currentNotebook {
             NavigationStack {
                 ZStack {
-                    DocumentView(documentWrapper: $mainEditVM.currentDocumentWrapper, selectedTool: $toolbarVM.selectedToolData)
+                    DocumentView(documentWrapper: $mainEditVM.currentDocumentWrapper, selectedTool: $toolbarVM.selectedToolData, $toolbarVM.showRuler)
                         .offset(y: mainEditVM.documentViewOffsetAmount)
                     
                     if mainEditVM.showMarkupToolbar {

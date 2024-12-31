@@ -19,10 +19,10 @@ struct FountainPenPropertiesView: View {
     var body: some View {
         NavigationStack {
             List {
-                Slider(value: $penWidth, in: 0...15, step: 0.5) {
+                Slider(value: $penWidth, in: 5...15, step: 0.5) {
                     Text("Stroke Size")
                 } minimumValueLabel: {
-                    Text("1")
+                    Text("5")
                 } maximumValueLabel: {
                     Text("15")
                 }
@@ -31,7 +31,7 @@ struct FountainPenPropertiesView: View {
                     selectedToolData = penTool  // This updates the selected tool data on the main canvas so that it looks like it updated in real-time
                 }
                 
-                Text("Stroke Size: \(Double(penTool.width))")
+                Text("Stroke Size: \(Float(penTool.width))")
                 
                 Section {
                     ColorPicker("Stroke Colour", selection: $penColor)
@@ -40,14 +40,6 @@ struct FountainPenPropertiesView: View {
                             selectedToolData = penTool  // This updates the selected tool data on the main canvas so that it looks like it updated in real-time
                         }
                 }
-                
-                Section {
-                    Button("Reset to Default Stroke Size") {
-                        penTool.width = 5
-                        selectedToolData = PKInkingTool(.pen, color: .black, width: 5)  // Reset to the default configurations
-                    }
-                }
-
             }
             .navigationTitle("Fountain Pen")
             .navigationBarTitleDisplayMode(.inline)

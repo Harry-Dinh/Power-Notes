@@ -19,13 +19,19 @@ struct HighlighterPropertiesView: View {
     var body: some View {
         NavigationStack {
             List {
-                Slider(value: $highlighterWidth, in: 10...50, step: 5)
-                    .onChange(of: highlighterWidth) {
-                        highlighterData.width = highlighterWidth
-                        selectedToolData = highlighterData
-                    }
+                Slider(value: $highlighterWidth, in: 10...50, step: 5) {
+                    Text("Highlighter Width")
+                } minimumValueLabel: {
+                    Text("10")
+                } maximumValueLabel: {
+                    Text("50")
+                }
+                .onChange(of: highlighterWidth) {
+                    highlighterData.width = highlighterWidth
+                    selectedToolData = highlighterData
+                }
                 
-                Text("Highlighter Width: \(Double(highlighterData.width))")
+                Text("Highlighter Width: \(Float(highlighterData.width))")
                 
                 Section {
                     ColorPicker("Highlighter Colour", selection: $highlighterColor)
@@ -34,16 +40,10 @@ struct HighlighterPropertiesView: View {
                             selectedToolData = highlighterData
                         }
                 }
-                
-                Section {
-                    Button("Reset to Default Stroke Size", role: .destructive) {
-                        highlighterData.width = 20
-                        highlighterData.color = .systemYellow
-                        selectedToolData = highlighterData
-                    }
-                }
             }
             .listStyle(.grouped)
+            .navigationTitle("Highlighter Tool")
+            .navigationBarTitleDisplayMode(.inline)
         }
         .frame(minWidth: 350, minHeight: 350)
     }

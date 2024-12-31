@@ -15,11 +15,13 @@ struct DocumentView: UIViewRepresentable {
     private var pdfView = PDFView()
     @Binding var documentWrapper: PDFDocumentWrapper
     @Binding var selectedTool: PKTool
+    @Binding var showRuler: Bool
     @Environment(\.undoManager) var undoManager
     
-    init(documentWrapper: Binding<PDFDocumentWrapper>, selectedTool: Binding<PKTool>) {
+    init(documentWrapper: Binding<PDFDocumentWrapper>, selectedTool: Binding<PKTool>, _ showRuler: Binding<Bool>) {
         self._documentWrapper = documentWrapper
         self._selectedTool = selectedTool
+        self._showRuler = showRuler
     }
     
     // MARK: - Make UIView Function
@@ -39,7 +41,13 @@ struct DocumentView: UIViewRepresentable {
     
     // MARK: - Update UIView Function
     func updateUIView(_ uiView: PDFView, context: Context) {
+        // Update the currently selected tool
         updateSelectedTool(context)
+        
+        // Show or hide the ruler
+        if context.coordinator.canvasView != nil {
+            context.coordinator.canvasView.isRulerActive = showRuler
+        }
     }
     
     // MARK: - Make Coordinator Function
@@ -89,6 +97,7 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
         canvasView.isScrollEnabled = false
         canvasView.isDrawingEnabled = true
         canvasView.tool = parent.selectedTool
+        canvasView.isRulerActive = parent.showRuler
         
         // Add a double tap gesture recognizer to zoom the document to its width
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTapToZoomGesture))
@@ -108,8 +117,8 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
         parent.pdfView.scaleFactor = parent.pdfView.scaleFactorForSizeToFit
     }
     
+    // TODO: This function needs revision!
     private func registerUndoRedoActions(_ canvasView: PKCanvasView) {
-        print("registerUndoRedoActions() called")
         guard let undoManager = parent.undoManager else {
             print("Cannot unwrap undo manager from parent")
             return

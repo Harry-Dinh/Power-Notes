@@ -61,6 +61,26 @@ struct CustomMarkupToolbar: View {
                            selectedToolData: $toolbarVM.selectedToolData) {
                     toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .pencil)].toggle()
                 }
+                           .popover(isPresented: $toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .pencil)]) {
+                               PencilPropertiesView(pencilData: $toolbarVM.pencilData,
+                                                    selectedToolData: $toolbarVM.selectedToolData,
+                                                    pencilStrokeSize: toolbarVM.pencilData.width,
+                                                    pencilColor: Color(uiColor: toolbarVM.pencilData.color))
+                           }
+                
+                Spacer()
+                
+                ToolToggle(tool: .eraser,
+                           selectedTool: $toolbarVM.selectedTool,
+                           selectedToolData: $toolbarVM.selectedToolData) {
+                    toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .eraser)].toggle()
+                }
+                           .popover(isPresented: $toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .eraser)]) {
+                               EraserPropertiesView(eraserData: $toolbarVM.eraserData,
+                                                    selectedToolData: $toolbarVM.selectedToolData,
+                                                    eraserWidth: toolbarVM.eraserData.width,
+                                                    eraseEntireStroke: toolbarVM.eraserTypeToBool(toolbarVM.eraserData.eraserType))
+                           }
                 
                 Spacer()
                 
