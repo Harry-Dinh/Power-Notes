@@ -38,7 +38,7 @@ class CustomMarkupToolbarVM {
     
     // These are for storing user preferences and will be stored in UserDefaults so that they can be loaded into the app when it launches
     public var fountainPenData: PKInkingTool = PKInkingTool(.pen, color: .black, width: 5)
-    public var highlighterData: PKInkingTool = PKInkingTool(.marker, color: .systemYellow, width: 5)
+    public var highlighterData: PKInkingTool = PKInkingTool(.marker, color: .systemYellow, width: 20)
     public var pencilData: PKInkingTool = PKInkingTool(.pencil, color: .systemBlue, width: 5)
     public var eraserData: PKEraserTool = PKEraserTool(.vector, width: 3)
     

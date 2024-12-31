@@ -31,12 +31,12 @@ struct CustomMarkupToolbar: View {
                            selectedToolData: $toolbarVM.selectedToolData) {
                     toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .fountainPen)].toggle()
                 }
-                .popover(isPresented: $toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .fountainPen)]) {
-                    FountainPenPropertiesView(penTool: $toolbarVM.fountainPenData,
-                                              selectedToolData: $toolbarVM.selectedToolData,
-                                              penColor: Color(uiColor: toolbarVM.fountainPenData.color),
-                                              penWidth: CGFloat(toolbarVM.fountainPenData.width))
-                }
+                           .popover(isPresented: $toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .fountainPen)]) {
+                               FountainPenPropertiesView(penTool: $toolbarVM.fountainPenData,
+                                                         selectedToolData: $toolbarVM.selectedToolData,
+                                                         penColor: Color(uiColor: toolbarVM.fountainPenData.color),
+                                                         penWidth: toolbarVM.fountainPenData.width)
+                           }
                 
                 Spacer()
                 
@@ -46,6 +46,12 @@ struct CustomMarkupToolbar: View {
                            selectedToolData: $toolbarVM.selectedToolData) {
                     toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .highlighter)].toggle()
                 }
+                           .popover(isPresented: $toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .highlighter)]) {
+                               HighlighterPropertiesView(highlighterData: $toolbarVM.highlighterData,
+                                                         selectedToolData: $toolbarVM.selectedToolData,
+                                                         highlighterColor: Color(uiColor: toolbarVM.highlighterData.color),
+                                                         highlighterWidth: toolbarVM.highlighterData.width)
+                           }
                 
                 Spacer()
                 
