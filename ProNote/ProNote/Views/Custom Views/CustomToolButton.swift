@@ -14,6 +14,8 @@ struct ToolToggle: View {
     @Binding var selectedToolData: PKTool
     var toolAction: () -> Void
     
+    @State private var toolbarVM = CustomMarkupToolbarVM.instance
+    
     var body: some View {
         Button(action: {
             if selectedTool == tool {
@@ -22,16 +24,16 @@ struct ToolToggle: View {
                 switch tool {
                     case .fountainPen:
                         print("Switched to pen tool")
-                        selectedToolData = PKInkingTool(.pen, color: .black, width: 5)
+                        selectedToolData = toolbarVM.fountainPenData
                     case .highlighter:
                         print("Switched to highlighter tool")
-                        selectedToolData = PKInkingTool(.marker, color: .systemYellow, width: 5)
+                        selectedToolData = toolbarVM.highlighterData
                     case .pencil:
                         print("Switched to pencil tool")
-                        selectedToolData = PKInkingTool(.pencil, color: .systemBlue, width: 5)
+                        selectedToolData = toolbarVM.pencilData
                     case .eraser:
                         print("Switched to eraser")
-                        selectedToolData = PKEraserTool(.vector, width: 3)
+                        selectedToolData = toolbarVM.eraserData
                     case .lasso:
                         print("Switched to lasso tool")
                         selectedToolData = PKLassoTool()

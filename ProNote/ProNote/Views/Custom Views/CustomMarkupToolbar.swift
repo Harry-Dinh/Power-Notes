@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
+import PencilKit
 
 struct CustomMarkupToolbar: View {
     
-//    @State private var primaryVM = PrimaryVM.instance
     @State private var toolbarVM = CustomMarkupToolbarVM.instance
     @Environment(\.colorScheme) var colorScheme
     
@@ -21,11 +21,39 @@ struct CustomMarkupToolbar: View {
             
             HStack(alignment: .center) {
                 
-                ForEach(CustomMarkupToolbarVM.ToolButton.allCases, id: \.self) { tool in
-                    Spacer()
-                    ToolToggle(tool: tool, selectedTool: $toolbarVM.selectedTool, selectedToolData: $toolbarVM.selectedToolData) {
-                        // Open specific tool actions here...
-                    }
+                // Didn't use a ForEach loop because the popover wouldn't show up properly
+                
+                Spacer()
+                
+                // MARK: Fountain Pen Button
+                ToolToggle(tool: .fountainPen,
+                           selectedTool: $toolbarVM.selectedTool,
+                           selectedToolData: $toolbarVM.selectedToolData) {
+                    toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .fountainPen)].toggle()
+                }
+                .popover(isPresented: $toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .fountainPen)]) {
+                    FountainPenPropertiesView(penTool: $toolbarVM.fountainPenData,
+                                              selectedToolData: $toolbarVM.selectedToolData,
+                                              penColor: Color(uiColor: toolbarVM.fountainPenData.color),
+                                              penWidth: CGFloat(toolbarVM.fountainPenData.width))
+                }
+                
+                Spacer()
+                
+                // MARK: Highlighter Button
+                ToolToggle(tool: .highlighter,
+                           selectedTool: $toolbarVM.selectedTool,
+                           selectedToolData: $toolbarVM.selectedToolData) {
+                    toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .highlighter)].toggle()
+                }
+                
+                Spacer()
+                
+                // MARK: Pencil Button
+                ToolToggle(tool: .pencil,
+                           selectedTool: $toolbarVM.selectedTool,
+                           selectedToolData: $toolbarVM.selectedToolData) {
+                    toolbarVM.toggleToolPropertiesView[toolbarVM.toolToIndex(tool: .pencil)].toggle()
                 }
                 
                 Spacer()
