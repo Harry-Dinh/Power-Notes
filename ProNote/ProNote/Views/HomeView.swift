@@ -19,11 +19,11 @@ struct HomeView: View {
         } detail: {
             FolderView(primaryVM.homeFolder)
         }
-        .fullScreenCover(isPresented: $folderVM.openNotebook) {
-            if let notebook = mainEditVM.currentNotebook {
-                MainEditView(notebook)
-            }
-        }
+//        .fullScreenCover(isPresented: $folderVM.openNotebook) {
+//            if let notebook = mainEditVM.currentNotebook.notebook {
+//                MainEditView()
+//            }
+//        }
     }
 }
 

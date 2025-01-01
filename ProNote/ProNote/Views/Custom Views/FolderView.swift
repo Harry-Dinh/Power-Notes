@@ -32,14 +32,10 @@ struct FolderView: View {
                             ForEach(folderVM.currentFolder.notebooks) { notebook in
                                 NotebookGridView(notebook)
                                     .onTapGesture {
-                                        mainEditVM.currentNotebook = notebook
+                                        mainEditVM.currentNotebook.notebook = notebook
                                         folderVM.openNotebook.toggle()
                                     }
                             }
-                            
-//                            ForEach(0..<20) { _ in
-//                                NotebookGridView(PNNotebook.PLACEHOLDER)
-//                            }
                         }
                     }
                 }
@@ -76,7 +72,7 @@ struct FolderView: View {
                     Menu {
                         Button(action: {
                             let quickNote = noteCreationVM.createQuickNote()
-                            mainEditVM.currentNotebook = quickNote
+                            mainEditVM.currentNotebook.notebook = quickNote
                             folderVM.openNotebook.toggle()
                         }) {
                             Label("New Quick Note", systemImage: "note.text")

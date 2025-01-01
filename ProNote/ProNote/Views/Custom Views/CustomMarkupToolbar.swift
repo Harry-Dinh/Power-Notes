@@ -70,6 +70,7 @@ struct CustomMarkupToolbar: View {
                 
                 Spacer()
                 
+                // MARK: Eraser Button
                 ToolToggle(tool: .eraser,
                            selectedTool: $toolbarVM.selectedTool,
                            selectedToolData: $toolbarVM.selectedToolData) {
@@ -84,6 +85,16 @@ struct CustomMarkupToolbar: View {
                 
                 Spacer()
                 
+                // MARK: Lasso Button
+                ToolToggle(tool: .lasso,
+                           selectedTool: $toolbarVM.selectedTool,
+                           selectedToolData: $toolbarVM.selectedToolData) {
+                    // No operations
+                }
+                
+                Spacer()
+                
+                // MARK: Ruler Toggle
                 Toggle(isOn: $toolbarVM.showRuler) {
                     Image("custom-ruler")
                         .resizable()

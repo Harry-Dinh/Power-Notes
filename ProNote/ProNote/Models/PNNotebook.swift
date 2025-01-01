@@ -32,6 +32,9 @@ struct PNNotebook: Identifiable {
     /// A boolean keeps track of if the notebook is bookmarked or not
     var isBookmarked: Bool
     
+    /// A collection of thumbnails for the PDF file
+    var thumbnails: [UIImage]
+    
     init() {
         self.id = UUID().uuidString
         self.name = "Untitled Notebook"
@@ -40,6 +43,7 @@ struct PNNotebook: Identifiable {
         self.document = nil
         self.userAnnotation = nil
         self.isBookmarked = false
+        self.thumbnails = []
     }
     
     init(_ name: String) {
@@ -50,6 +54,7 @@ struct PNNotebook: Identifiable {
         self.document = nil
         self.userAnnotation = nil
         self.isBookmarked = false
+        self.thumbnails = []
     }
     
     init(_ id: String, _ name: String, _ dateCreated: Date, _ lastEdited: Date, _ document: PDFDocument?, _ userAnnotation: PKDrawing?, _ isBookmarked: Bool) {
@@ -60,6 +65,7 @@ struct PNNotebook: Identifiable {
         self.document = document
         self.userAnnotation = userAnnotation
         self.isBookmarked = isBookmarked
+        self.thumbnails = []
     }
     
     public static let PLACEHOLDER = PNNotebook("NX-93581", "Debug Notebook", Date(), Date(), nil, nil, false)

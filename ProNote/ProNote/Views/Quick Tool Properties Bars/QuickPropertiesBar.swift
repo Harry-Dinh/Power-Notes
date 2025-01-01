@@ -1,5 +1,5 @@
 //
-//  FountainPenPropertiesBar.swift
+//  QuickPropertiesBar.swift
 //  ProNote
 //
 //  Created by Harry Dinh on 2024-12-26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FountainPenPropertiesBar: View {
+struct QuickPropertiesBar: View {
     
     @State private var selectedColor = Color.accentColor
     

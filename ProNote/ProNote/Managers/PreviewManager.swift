@@ -10,6 +10,8 @@ import UIKit
 
 class PreviewManager {
     
+    // TODO: Need to modify these functions to include the user annotation on the PDF!
+    
     /// Convert a page from the provided PDF document into a `UIImage`. This can be used to export existing PDF in Power Notes into external images for sharing, or use in app for displaying thumbnails for documents and templates.
     /// - Parameters:
     ///   - document: The PDF document to get a page from
@@ -57,5 +59,44 @@ class PreviewManager {
         let renderedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return renderedImage
+    }
+    
+    /// Convert a given `PDFPage` to a `UIImage`
+    /// - Parameters:
+    ///   - pdfPage: The page to convert
+    ///   - scale: The scale factor of the page. `2.0` by default to look sharp on Retina displays
+    /// - Returns: An image of the provided page
+    public static func pdfPageToImage(pdfPage: PDFPage, scale: CGFloat = 2.0) -> UIImage? {
+        // Get the page bounds
+        let pageRect = pdfPage.bounds(for: .mediaBox)
+        
+        // Create a render format that scales the image
+        let scaledPageRect = CGRect(x: 0, y: 0, width: pageRect.width * scale, height: pageRect.height * scale)
+        
+        // Create a bitmap-based graphics context
+        UIGraphicsBeginImageContext(scaledPageRect.size)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        
+        // Set the scale factor to the context
+        context.scaleBy(x: scale, y: scale)
+        
+        // Fill the background with white colour
+        context.setFillColor(UIColor.white.cgColor)
+        context.fill(scaledPageRect)
+        
+        // Draw the PDF page into the context
+        context.saveGState()
+        context.translateBy(x: 0.0, y: scaledPageRect.size.height)
+        context.scaleBy(x: 1.0, y: -1.0)
+        context.drawPDFPage(pdfPage.pageRef!)
+        context.restoreGState()
+        
+        // Get the resulting image from the context
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image
     }
 }

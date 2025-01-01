@@ -15,26 +15,42 @@ struct MainEditView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.undoManager) var undoManager
     
-    // Creation initializer (call after opening existing notes or creating quick notes)
-    init() {}
+    // This initializer assumes that the notebook was already initialized
+    init() {
+        // Unwrap the notebook and its document as the view is initializing
+        guard let notebook = mainEditVM.currentNotebook.notebook,
+              let document = notebook.document else {
+            fatalError("Cannot unwrap notebook and/or document")
+        }
+        self.mainEditVM.currentDocumentWrapper = PDFDocumentWrapper(document)
+        
+        // Preload the thumbnails for the overview screen
+        self.mainEditVM.preloadNotebookThumbnails()
+    }
     
     // Default initializer (call when creating a new note)
     init(_ notebook: PNNotebook) {
-        self.mainEditVM.currentNotebook = notebook
+        // Assign the notebook and its wrapper object
+        self.mainEditVM.currentNotebook = PNNotebookWrapper(notebook)
         
         // Unwrap the document as the view is initializing
         guard let document = notebook.document else {
             fatalError("Cannot unwrap document")
         }
         self.mainEditVM.currentDocumentWrapper = PDFDocumentWrapper(document)
+        
+        // Preload the thumbnails for the overview screen
+        self.mainEditVM.preloadNotebookThumbnails()
     }
     
     var body: some View {
-        if let notebook = mainEditVM.currentNotebook {
+        if let notebook = mainEditVM.currentNotebook.notebook {
             NavigationStack {
                 ZStack {
-                    DocumentView(documentWrapper: $mainEditVM.currentDocumentWrapper, selectedTool: $toolbarVM.selectedToolData, $toolbarVM.showRuler)
-                        .offset(y: mainEditVM.documentViewOffsetAmount)
+                    DocumentView(documentWrapper: $mainEditVM.currentDocumentWrapper,
+                                 selectedTool: $toolbarVM.selectedToolData,
+                                 $toolbarVM.showRuler)
+                    .offset(y: mainEditVM.documentViewOffsetAmount)
                     
                     if mainEditVM.showMarkupToolbar {
                         GeometryReader { geometry in
@@ -56,7 +72,9 @@ struct MainEditView: View {
                             Image(systemName: "chevron.left")
                         }
                         
-                        Button(action: {}) {
+                        Button(action: {
+                            mainEditVM.openPageOverview.toggle()
+                        }) {
                             Image(systemName: "square.grid.2x2")
                         }
                     }
@@ -168,6 +186,9 @@ struct MainEditView: View {
                     Button(action: {}) {
                         Label("Print", systemImage: "printer")
                     }
+                }
+                .sheet(isPresented: $mainEditVM.openPageOverview) {
+                    ThumbnailOverviewView(notebook: $mainEditVM.currentNotebook)
                 }
             }
         }
