@@ -11,5 +11,5 @@ The following checklist shows the features that will be available in Power Notes
 - [ ] File browser (home screen)
 - [ ] Notebook creation
 - [ ] Notebook view
-- [ ] Page view (with `PKCanvasView` incorporated)
-- [ ] Annotating on a page (captured with the `PKDrawing` object)
+- [ ] Page view (supporting `PDFView` on each page with an overlaying `PKCanvasView` on top)
+- [ ] Annotating on a page (captured with the `PKDrawing` object and displayed using `PKCanvasView`)
