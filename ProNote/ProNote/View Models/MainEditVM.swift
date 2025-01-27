@@ -21,6 +21,7 @@ class MainEditVM {
     public var showTemplatePicker = false
     public var pageCount = 0
     public var currentDocumentWrapper = PDFDocumentWrapper(nil)     // This will be with a document before the view loads
+    public var pdfView: PDFView = PDFView()
     
     public func quicklyInsertPageAtEnd() {
         guard let document = currentDocumentWrapper.document,

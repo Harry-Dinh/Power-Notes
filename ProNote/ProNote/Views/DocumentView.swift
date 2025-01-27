@@ -12,7 +12,7 @@ import Foundation
 
 struct DocumentView: UIViewRepresentable {
     
-    private var pdfView = PDFView()
+    @State private var mainEditVM = MainEditVM.instance
     @Binding var documentWrapper: PDFDocumentWrapper
     @Binding var selectedTool: PKTool
     @Binding var showRuler: Bool
@@ -27,16 +27,16 @@ struct DocumentView: UIViewRepresentable {
     // MARK: - Make UIView Function
     func makeUIView(context: Context) -> PDFView {
         // Configure the PDF view
-        pdfView.delegate = context.coordinator
-        pdfView.pageOverlayViewProvider = context.coordinator
-        pdfView.autoScales = true
-        pdfView.displayMode = .singlePageContinuous
-        pdfView.displayDirection = .vertical
-        pdfView.displaysPageBreaks = true
-        pdfView.usePageViewController(false)
-        pdfView.isInMarkupMode = true
-        pdfView.document = documentWrapper.document
-        return pdfView
+        mainEditVM.pdfView.delegate = context.coordinator
+        mainEditVM.pdfView.pageOverlayViewProvider = context.coordinator
+        mainEditVM.pdfView.autoScales = true
+        mainEditVM.pdfView.displayMode = .singlePageContinuous
+        mainEditVM.pdfView.displayDirection = .vertical
+        mainEditVM.pdfView.displaysPageBreaks = true
+        mainEditVM.pdfView.usePageViewController(false)
+        mainEditVM.pdfView.isInMarkupMode = true
+        mainEditVM.pdfView.document = documentWrapper.document
+        return mainEditVM.pdfView
     }
     
     // MARK: - Update UIView Function
@@ -114,7 +114,7 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
     // MARK: - Coordinator Helper Functions
     
     @objc func doubleTapToZoomGesture() {
-        parent.pdfView.scaleFactor = parent.pdfView.scaleFactorForSizeToFit
+        parent.mainEditVM.pdfView.scaleFactor = parent.mainEditVM.pdfView.scaleFactorForSizeToFit
     }
     
     // TODO: This function needs revision!

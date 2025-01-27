@@ -188,7 +188,7 @@ struct MainEditView: View {
                     }
                 }
                 .sheet(isPresented: $mainEditVM.openPageOverview) {
-                    ThumbnailOverviewView(notebook: $mainEditVM.currentNotebook)
+                    ThumbnailOverviewView()
                 }
             }
         }
