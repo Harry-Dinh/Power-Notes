@@ -21,6 +21,7 @@ class MainEditVM {
     public var showTemplatePicker = false
     public var pageCount = 0
     public var currentDocumentWrapper = PDFDocumentWrapper(nil)     // This will be with a document before the view loads
+    public var pdfView: PDFView = PDFView()
     
     public func quicklyInsertPageAtEnd() {
         guard let document = currentDocumentWrapper.document,
@@ -43,7 +44,6 @@ class MainEditVM {
         }
     }
     
-    // TODO: Call this function in the initializer of the MainEditView AFTER assigning the notebook data
     public func preloadNotebookThumbnails() {
         print("preloadNotebookThumbnails() called")
         guard var currentNotebook = currentNotebook.notebook,
@@ -52,8 +52,9 @@ class MainEditVM {
         }
         
         // Remove all previous thumbnails from last fetch session
+        // This might be extremely inefficient...
         if document.pageCount > 0 {
-            print("Number of pages: \(document.pageCount)")
+            print("Removed all thumbnails to prepare for refill")
             currentNotebook.thumbnails.removeAll()
         }
         
@@ -61,8 +62,6 @@ class MainEditVM {
             guard let thumbnail = PreviewManager.convertPDFToImage(document: document, pageIndex: i) else {
                 continue
             }
-            
-            print(i)
             currentNotebook.thumbnails.append(thumbnail)
         }
     }
