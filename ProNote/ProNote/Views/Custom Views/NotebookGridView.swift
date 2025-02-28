@@ -17,7 +17,7 @@ struct NotebookGridView: View {
     
     var body: some View {
         // This method might be inefficient :P
-        if let document = notebook.document, let thumbnail = PreviewManager.convertPDFToImage(document: document, pageIndex: 0) {
+        if let document = notebook.document, let thumbnail = PreviewManager.pdfDocumentToImage(document: document, pageIndex: 0) {
             VStack(spacing: 10) {
                 Image(uiImage: thumbnail)
                     .resizable()

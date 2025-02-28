@@ -66,7 +66,7 @@ class PrimaryVM {
         
         for url in templateURLs {
             guard let document = PDFDocument(url: url),
-                  let convertedImage = PreviewManager.convertPDFToImage(document: document, pageIndex: 0) else {
+                  let convertedImage = PreviewManager.pdfDocumentToImage(document: document, pageIndex: 0) else {
                 print("Cannot convert document to image")
                 return
             }

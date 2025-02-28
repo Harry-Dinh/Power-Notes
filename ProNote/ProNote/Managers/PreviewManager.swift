@@ -18,7 +18,7 @@ class PreviewManager {
     ///   - pageIndex: The page index to get from the document
     ///   - imageSize: The size of the resulting image
     /// - Returns: A `UIImage` object that contains the data of the converted PDF page.
-    public static func convertPDFToImage(document: PDFDocument, pageIndex: Int, imageSize: CGSize? = nil) -> UIImage? {
+    public static func pdfDocumentToImage(document: PDFDocument, pageIndex: Int, imageSize: CGSize? = nil) -> UIImage? {
         guard let page = document.page(at: pageIndex) else {
             print("Invalid page index")
             return nil

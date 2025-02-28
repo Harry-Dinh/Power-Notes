@@ -13,7 +13,7 @@ class MainEditVM {
     
     public static let instance = MainEditVM()
     
-    public var openPageOverview = false
+    public var openPageOverview = NavigationSplitViewVisibility.detailOnly
     
     public var currentNotebook = PNNotebookWrapper(nil)
     public var showMarkupToolbar = true
@@ -45,24 +45,24 @@ class MainEditVM {
     }
     
     public func preloadNotebookThumbnails() {
-        print("preloadNotebookThumbnails() called")
-        guard var currentNotebook = currentNotebook.notebook,
-              let document = currentNotebook.document else {
-            fatalError("Failed to unwrap notebook and/or document")
+        // Unwrap notebook and document
+        guard var notebook = currentNotebook.notebook,
+              let document = notebook.document else {
+            fatalError("Unable to unwrap notebook and/or document")
         }
         
-        // Remove all previous thumbnails from last fetch session
-        // This might be extremely inefficient...
+        // Remove all thumbnails from the previous fetch session
         if document.pageCount > 0 {
-            print("Removed all thumbnails to prepare for refill")
-            currentNotebook.thumbnails.removeAll()
+            notebook.thumbnails.removeAll()
         }
         
+        // Convert and append new thumbnails
         for i in 0..<document.pageCount {
-            guard let thumbnail = PreviewManager.convertPDFToImage(document: document, pageIndex: i) else {
+            guard let page = document.page(at: i),
+                  let thumbnail = PreviewManager.pdfPageToImage(pdfPage: page) else {
                 continue
             }
-            currentNotebook.thumbnails.append(thumbnail)
+            notebook.thumbnails.append(thumbnail)
         }
     }
 }

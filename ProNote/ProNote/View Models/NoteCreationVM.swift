@@ -72,6 +72,15 @@ class NoteCreationVM {
         var newNotebook = PNNotebook(notebookName)
         newNotebook.document = finalDoc
         
+        // Convert all pages in the newly created notebook to an image
+        for i in 0..<finalDoc.pageCount {
+            guard let page = finalDoc.page(at: i),
+                  let thumbnail = PreviewManager.pdfPageToImage(pdfPage: page) else {
+                continue
+            }
+            newNotebook.thumbnails.append(thumbnail)
+        }
+        
         // Append the new PNNotebook to the notebook array
         primaryVM.homeFolder.notebooks.append(newNotebook)
         print("NoteCreationVM.createNotebook() completed")
@@ -84,6 +93,15 @@ class NoteCreationVM {
         let blankPageDoc = PDFDocument(url: templateURL)
         var newQuickNote = PNNotebook("New Quick Note")
         newQuickNote.document = blankPageDoc
+        
+        // Append the first page into the thumbnail array
+        guard let doc = blankPageDoc,
+              let firstPage = doc.page(at: 0),
+              let thumbnail = PreviewManager.pdfPageToImage(pdfPage: firstPage) else {
+            fatalError("Unable to convert first page to image, cannot proceed")
+        }
+        
+        newQuickNote.thumbnails.append(thumbnail)
         primaryVM.homeFolder.notebooks.append(newQuickNote)
         return newQuickNote
     }

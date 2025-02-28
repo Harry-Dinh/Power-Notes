@@ -107,8 +107,13 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
         return canvasView
     }
     
+    // Register any actions take place when the drawing on the canvas changes
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
+        // Register previous strokes into UndoManager
         registerUndoRedoActions(canvasView)
+        
+        // Update the page thumbnail on the document sidebar
+        // TODO: Call the function here...
     }
     
     // MARK: - Coordinator Helper Functions
@@ -117,7 +122,7 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
         parent.mainEditVM.pdfView.scaleFactor = parent.mainEditVM.pdfView.scaleFactorForSizeToFit
     }
     
-    // TODO: This function needs revision!
+    // FIXME: This function needs revision!
     private func registerUndoRedoActions(_ canvasView: PKCanvasView) {
         guard let undoManager = parent.undoManager else {
             print("Cannot unwrap undo manager from parent")

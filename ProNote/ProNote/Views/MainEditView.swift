@@ -45,13 +45,18 @@ struct MainEditView: View {
     
     var body: some View {
         if let notebook = mainEditVM.currentNotebook.notebook {
-            NavigationStack {
+            // The column visibility value passed in will present the sidebar from showing by default
+            NavigationSplitView(columnVisibility: $mainEditVM.openPageOverview) {
+                DocumentSidebarView(notebookWrapper: $mainEditVM.currentNotebook)
+            } detail: {
                 ZStack {
+                    // Main document (edit view)
                     DocumentView(documentWrapper: $mainEditVM.currentDocumentWrapper,
                                  selectedTool: $toolbarVM.selectedToolData,
                                  $toolbarVM.showRuler)
                     .offset(y: mainEditVM.documentViewOffsetAmount)
                     
+                    // Markup toolbar
                     if mainEditVM.showMarkupToolbar {
                         GeometryReader { geometry in
                             CustomMarkupToolbar()
@@ -69,14 +74,14 @@ struct MainEditView: View {
                             dismiss.callAsFunction()
                             // TODO: Add a function to save progress here
                         }) {
-                            Image(systemName: "chevron.left")
+                            Image(systemName: "chevron.down")
                         }
                         
-                        Button(action: {
-                            mainEditVM.openPageOverview.toggle()
-                        }) {
-                            Image(systemName: "square.grid.2x2")
-                        }
+    //                        Button(action: {
+    //                            mainEditVM.openPageOverview.toggle()
+    //                        }) {
+    //                            Image(systemName: "sidebar.left")
+    //                        }
                     }
                     
                     ToolbarItemGroup(placement: .secondaryAction) {
@@ -187,10 +192,8 @@ struct MainEditView: View {
                         Label("Print", systemImage: "printer")
                     }
                 }
-                .sheet(isPresented: $mainEditVM.openPageOverview) {
-                    ThumbnailOverviewView()
-                }
             }
+            .navigationSplitViewStyle(.prominentDetail)
         }
     }
 }
