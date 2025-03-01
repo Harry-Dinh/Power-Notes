@@ -39,6 +39,11 @@ class MainEditVM {
     
     /// The `PDFView` for rendering the current notebook's document.
     public var pdfView: PDFView = PDFView()
+    public var userFountainPenColorPalette: [Color] = []
+    public var userHighlighterColorPalette: [Color] = []
+    public var userPencilToolColorPalette: [Color] = []
+    
+    // MARK: - Public Functions
     
     /// This function appends a new page at the end of the document using the same template as the previous page. This function is called when the user taps the "Add Page" button at the top of the toolbar.
     public func quicklyInsertPageAtEnd() {
@@ -82,5 +87,71 @@ class MainEditVM {
             }
             notebook.thumbnails.append(thumbnail)
         }
+    }
+    
+    public func saveUserColorPalettes() {
+        // Convert the colors in each palette to an array of hex strings
+        let fountainPenHex = convertToHexArray(userFountainPenColorPalette)
+        let highlighterHex = convertToHexArray(userHighlighterColorPalette)
+        let pencilToolHex = convertToHexArray(userPencilToolColorPalette)
+        
+        // Save the hex palettes to local storage
+        PNConstants.USER_DEFAULT.set(fountainPenHex, forKey: UDKeys.FOUNTAIN_PEN_PALETTE)
+        PNConstants.USER_DEFAULT.set(highlighterHex, forKey: UDKeys.HIGHLIGHTER_PALETTE)
+        PNConstants.USER_DEFAULT.set(pencilToolHex, forKey: UDKeys.PENCIL_PALETTE)
+    }
+    
+    public func loadUserColorPalettes() {
+        // Retrieve and unwrap the color palettes from UserDefaults
+        guard let fountainPenHex = PNConstants.USER_DEFAULT.array(forKey: UDKeys.FOUNTAIN_PEN_PALETTE) as? [String],
+              let highlighterHex = PNConstants.USER_DEFAULT.array(forKey: UDKeys.HIGHLIGHTER_PALETTE) as? [String],
+              let pencilToolHex = PNConstants.USER_DEFAULT.array(forKey: UDKeys.PENCIL_PALETTE) as? [String] else {
+            print("Unable to unwrap any of the hex arrays for the tool color palette")
+            return
+        }
+        
+        // Unwrap the color arrays
+        guard let fountainPalette = convertToColorArray(fountainPenHex),
+              let highlighterPalette = convertToColorArray(highlighterHex),
+              let pencilPalette = convertToColorArray(pencilToolHex) else {
+            print("Unable to convert hex arrays into color palettes")
+            return
+        }
+        
+        // Assign the color palettes to the respective properties
+        userFountainPenColorPalette = fountainPalette
+        userHighlighterColorPalette = highlighterPalette
+        userPencilToolColorPalette = pencilPalette
+    }
+    
+    // MARK: - Private Functions
+    
+    private func convertToHexArray(_ palette: [Color]) -> [String]? {
+        // Exit early if the provided color palette is empty
+        if palette.isEmpty { return nil }
+        
+        // Proceed to convert colors to hex codes
+        var hexCodes: [String] = []
+        for color in palette {
+            guard let hex = color.toHex() else {        // Attempt to unwrap the hex code
+                continue                                // Continue to the next color if previous one can't be unwrapped
+            }
+            hexCodes.append(hex)                        // Append hex code to array
+        }
+        return hexCodes
+    }
+    
+    private func convertToColorArray(_ hexCodes: [String]) -> [Color]? {
+        if hexCodes.isEmpty { return nil }
+        
+        // Proceed to convert to Color
+        var colorArray: [Color] = []
+        for hexCode in hexCodes {
+            guard let color = Color(hex: hexCode) else {
+                continue
+            }
+            colorArray.append(color)
+        }
+        return colorArray
     }
 }

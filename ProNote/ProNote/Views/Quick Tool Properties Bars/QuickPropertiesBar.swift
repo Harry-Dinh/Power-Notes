@@ -15,23 +15,10 @@ struct QuickPropertiesBar: View {
         ZStack {
             ScrollView(.horizontal) {
                 HStack(spacing: 25) {
-                    Button(action: {}) {
-                        Color.red
-                            .clipShape(Circle())
-                            .frame(width: 25, height: 25)
-                    }
-                    
-                    Button(action: {}) {
-                        Color.blue
-                            .clipShape(Circle())
-                            .frame(width: 25, height: 25)
-                    }
-                    
-                    Button(action: {}) {
-                        Color.yellow
-                            .clipShape(Circle())
-                            .frame(width: 25, height: 25)
-                    }
+                    // TODO: This is just a placeholder for now, replace this with a dynamically changing view instead!
+                    ColorButton(color: .red)
+                    ColorButton(color: .blue)
+                    ColorButton(color: .yellow)
                 }
             }
             
