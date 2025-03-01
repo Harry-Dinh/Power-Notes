@@ -36,6 +36,13 @@ struct DocumentView: UIViewRepresentable {
         mainEditVM.pdfView.usePageViewController(false)
         mainEditVM.pdfView.isInMarkupMode = true
         mainEditVM.pdfView.document = documentWrapper.document
+        
+        // Set up the page change observer (for updating the current page index)
+        NotificationCenter.default.addObserver(context.coordinator,
+                                               selector: #selector(context.coordinator.updateCurrentPageNumber(notification:)),
+                                               name: Notification.Name.PDFViewPageChanged,
+                                               object: mainEditVM.pdfView)
+        
         return mainEditVM.pdfView
     }
     
@@ -56,7 +63,7 @@ struct DocumentView: UIViewRepresentable {
     }
     
     // MARK: - Coordinator Class
-    class Coordinator: NSObject, PDFViewDelegate {
+    class Coordinator: NSObject {
         var parent: DocumentView
         var canvasView: PKCanvasView!
         
@@ -77,7 +84,7 @@ struct DocumentView: UIViewRepresentable {
 }
 
 // MARK: - Coordinator Extensions
-extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDelegate {
+extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDelegate, PDFViewDelegate {
     
     // Set up and overlay the canvas view over each PDF file
     func pdfView(_ view: PDFView, overlayViewFor page: PDFPage) -> UIView? {
@@ -120,6 +127,17 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
     
     @objc func doubleTapToZoomGesture() {
         parent.mainEditVM.pdfView.scaleFactor = parent.mainEditVM.pdfView.scaleFactorForSizeToFit
+    }
+    
+    @objc func updateCurrentPageNumber(notification: Notification) {
+        print("updateCurrentPageNumber() called")
+        guard let currentPage = parent.mainEditVM.pdfView.currentPage,
+              let pageIndex = parent.mainEditVM.pdfView.document?.index(for: currentPage) else {
+            print("Unable to get current page")
+            return
+        }
+        parent.mainEditVM.currentPage = pageIndex
+        print("Current page index: \(pageIndex)")
     }
     
     // FIXME: This function needs revision!

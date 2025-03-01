@@ -30,12 +30,15 @@ struct DocumentSidebarView: View {
                                     .padding(.top)
                                 Spacer()
                             }
+                            .padding(.top)
                             .listRowSeparator(.hidden)
                         }
                     }
                     .listStyle(.plain)
                 }
             }
+            .navigationTitle("Thumbnails")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

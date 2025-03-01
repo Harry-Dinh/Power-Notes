@@ -86,8 +86,8 @@ struct NoteCreationView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        let notebook = noteCreationVM.createNotebook()  // Let's hope this is not creating a copy of the same one that was added to the primary vm array...
-                        mainEditVM.currentNotebook.notebook = notebook
+                        let notebook = noteCreationVM.createNotebook()  // This might pass in a copy of the same one into the main edit vm...
+                        mainEditVM.currentNotebook = PNNotebookWrapper(notebook)
                         dismissModelAction.callAsFunction()
                     }) {
                         Text("Create")

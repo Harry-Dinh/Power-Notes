@@ -8,6 +8,7 @@
 import PDFKit
 import UIKit
 
+/// A class containing (mostly) static methods that are used to convert PDFs to images and vice versa.
 class PreviewManager {
     
     // TODO: Need to modify these functions to include the user annotation on the PDF!
@@ -67,6 +68,7 @@ class PreviewManager {
     ///   - scale: The scale factor of the page. `2.0` by default to look sharp on Retina displays
     /// - Returns: An image of the provided page
     public static func pdfPageToImage(pdfPage: PDFPage, scale: CGFloat = 2.0) -> UIImage? {
+        print("pdfPageToImage() called")
         // Get the page bounds
         let pageRect = pdfPage.bounds(for: .mediaBox)
         

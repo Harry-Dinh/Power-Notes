@@ -11,7 +11,7 @@ import PencilKit
 /// An object that represent a virtual notebook that the user can create and edit.
 struct PNNotebook: Identifiable {
     
-    /// The unique identifier of this notebook (required for conforming to Swift's `Identifiable` protocol
+    /// The unique identifier of this notebook (required for conforming to Swift's `Identifiable` protocol)
     var id: String
     
     /// The human-readable name of this notebook

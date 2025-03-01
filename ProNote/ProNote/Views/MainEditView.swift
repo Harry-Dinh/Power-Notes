@@ -22,6 +22,8 @@ struct MainEditView: View {
               let document = notebook.document else {
             fatalError("Cannot unwrap notebook and/or document")
         }
+        
+        // Fetch the unwrapped document from the notebook and create a wrapper to work with SwiftUI
         self.mainEditVM.currentDocumentWrapper = PDFDocumentWrapper(document)
         
         // Preload the thumbnails for the overview screen
@@ -37,6 +39,8 @@ struct MainEditView: View {
         guard let document = notebook.document else {
             fatalError("Cannot unwrap document")
         }
+        
+        // Fetch the unwrapped document from the notebook and create a wrapper to work with SwiftUI
         self.mainEditVM.currentDocumentWrapper = PDFDocumentWrapper(document)
         
         // Preload the thumbnails for the overview screen
@@ -46,7 +50,7 @@ struct MainEditView: View {
     var body: some View {
         if let notebook = mainEditVM.currentNotebook.notebook {
             // The column visibility value passed in will present the sidebar from showing by default
-            NavigationSplitView(columnVisibility: $mainEditVM.openPageOverview) {
+            NavigationSplitView(columnVisibility: $mainEditVM.sidebarVisibility) {
                 DocumentSidebarView(notebookWrapper: $mainEditVM.currentNotebook)
             } detail: {
                 ZStack {
@@ -84,6 +88,7 @@ struct MainEditView: View {
     //                        }
                     }
                     
+                    // MARK: - Center Buttons
                     ToolbarItemGroup(placement: .secondaryAction) {
                         ControlGroup {
                             Button(action: {}) {
@@ -147,8 +152,11 @@ struct MainEditView: View {
                             Image(systemName: "bookmark")
                         }
                         
-                        // TODO: This has to be a menu!
-                        Button(action: {}) {
+                        Menu {
+                            Toggle(isOn: .constant(false)) {
+                                Label("Dynamic Pen Stroke", systemImage: "scribble.variable")
+                            }
+                        } label: {
                             Image(systemName: "ellipsis")
                                 .symbolVariant(.circle)
                         }

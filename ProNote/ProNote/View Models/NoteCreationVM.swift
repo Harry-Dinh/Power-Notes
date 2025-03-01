@@ -74,8 +74,7 @@ class NoteCreationVM {
         
         // Convert all pages in the newly created notebook to an image
         for i in 0..<finalDoc.pageCount {
-            guard let page = finalDoc.page(at: i),
-                  let thumbnail = PreviewManager.pdfPageToImage(pdfPage: page) else {
+            guard let thumbnail = PreviewManager.pdfDocumentToImage(document: finalDoc, pageIndex: i) else {
                 continue
             }
             newNotebook.thumbnails.append(thumbnail)
@@ -87,6 +86,8 @@ class NoteCreationVM {
         return newNotebook
     }
     
+    /// This function quickly create a quick note using the blank page template and open it immediately. It's the same process as creating a notebook (on the backend,) but without any prompt asking the user for the note's name or template.
+    /// - Returns: A `PNNotebook` object
     public func createQuickNote() -> PNNotebook {
         let primaryVM = PrimaryVM.instance
         let templateURL = primaryVM.templateURLs[1]
@@ -96,8 +97,7 @@ class NoteCreationVM {
         
         // Append the first page into the thumbnail array
         guard let doc = blankPageDoc,
-              let firstPage = doc.page(at: 0),
-              let thumbnail = PreviewManager.pdfPageToImage(pdfPage: firstPage) else {
+              let thumbnail = PreviewManager.pdfDocumentToImage(document: doc, pageIndex: 0) else {
             fatalError("Unable to convert first page to image, cannot proceed")
         }
         
