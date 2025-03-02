@@ -94,7 +94,7 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
         let pageBounds = page.bounds(for: .mediaBox)
         canvasView.frame = pageBounds
         
-        // Set the resolution so that the ink stroke doesn't look pixelated
+        // FIXME: Fix this so that the pen stroke don't look blurry!
         canvasView.contentScaleFactor = view.maxScaleFactor * 2
         
         // Configure the canvas view
@@ -118,9 +118,6 @@ extension DocumentView.Coordinator: PDFPageOverlayViewProvider, PKCanvasViewDele
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
         // Register previous strokes into UndoManager
         registerUndoRedoActions(canvasView)
-        
-        // Update the page thumbnail on the document sidebar
-        // TODO: Call the function here...
     }
     
     // MARK: - Coordinator Helper Functions

@@ -58,7 +58,7 @@ struct MainEditView: View {
                     DocumentView(documentWrapper: $mainEditVM.currentDocumentWrapper,
                                  selectedTool: $toolbarVM.selectedToolData,
                                  $toolbarVM.showRuler)
-                    .offset(y: mainEditVM.documentViewOffsetAmount)
+                    .offset(y: mainEditVM.documentViewOffsetAmount)     // Dynamically adjust the y-position to avoid being covered by the custom tool picker
                     
                     // Markup toolbar
                     if mainEditVM.showMarkupToolbar {
@@ -72,6 +72,9 @@ struct MainEditView: View {
                 .navigationTitle(notebook.name)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarRole(.editor)
+                // Update the notebook's thumbnails when the sidebar is opened or dismissed
+                .onChange(of: mainEditVM.sidebarVisibility) { mainEditVM.preloadNotebookThumbnails() }
+                // MARK: - Primary Toolbar
                 .toolbar {
                     ToolbarItemGroup(placement: .navigation) {
                         Button(action: {
@@ -80,12 +83,6 @@ struct MainEditView: View {
                         }) {
                             Image(systemName: "chevron.down")
                         }
-                        
-    //                        Button(action: {
-    //                            mainEditVM.openPageOverview.toggle()
-    //                        }) {
-    //                            Image(systemName: "sidebar.left")
-    //                        }
                     }
                     
                     // MARK: - Center Buttons
@@ -163,6 +160,7 @@ struct MainEditView: View {
                     }
                 }
                 .navigationBarBackButtonHidden()
+                // MARK: - Toolbar Title Menu
                 .toolbarTitleMenu {
                     Button(action: {}) {
                         Label("Rename", systemImage: "pencil")

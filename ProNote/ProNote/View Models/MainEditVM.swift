@@ -64,6 +64,7 @@ class MainEditVM {
     
     /// Preload the thumbnail of the member `currentNotebook` when the `MainEditView` is initializing.
     public func preloadNotebookThumbnails() {
+        print("preloadNotebookThumbnails() called")
         // Unwrap notebook and document
         guard var notebook = currentNotebook.notebook,
               let document = notebook.document else {
@@ -77,7 +78,7 @@ class MainEditVM {
         
         // Convert and append new thumbnails
         for i in 0..<document.pageCount {
-            guard let thumbnail = PreviewManager.pdfDocumentToImage(document: document, pageIndex: i) else {
+            guard let thumbnail = PreviewManager.pdfDocumentToImage(document: document, pageIndex: i, pdfView: self.pdfView) else {
                 continue
             }
             notebook.thumbnails.append(thumbnail)

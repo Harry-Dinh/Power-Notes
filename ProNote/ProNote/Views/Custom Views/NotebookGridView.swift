@@ -16,7 +16,7 @@ struct NotebookGridView: View {
     }
     
     var body: some View {
-        // This method might be inefficient :P
+        // TODO: Find anoher way to display the thumbnail of existing notebook without having to use the same function for making thumbnails in the main editing view
         if let document = notebook.document, let thumbnail = PreviewManager.pdfDocumentToImage(document: document, pageIndex: 0) {
             VStack(spacing: 10) {
                 Image(uiImage: thumbnail)
