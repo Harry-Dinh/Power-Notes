@@ -12,10 +12,16 @@
 
 /* Begin PBXFileReference section */
 		211554D82D17A2B10076B6E8 /* Templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Templates; sourceTree = "<group>"; };
+		217054F32E3C44B60000B9DA /* PowerNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PowerNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F5DC212CE5304900DE7736 /* ProNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProNote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		217054F42E3C44B60000B9DA /* PowerNotes */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PowerNotes;
+			sourceTree = "<group>";
+		};
 		21F5DC232CE5304900DE7736 /* ProNote */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ProNote;
@@ -24,6 +30,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		217054F02E3C44B60000B9DA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		21F5DC1E2CE5304800DE7736 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -39,6 +52,7 @@
 			children = (
 				211554D82D17A2B10076B6E8 /* Templates */,
 				21F5DC232CE5304900DE7736 /* ProNote */,
+				217054F42E3C44B60000B9DA /* PowerNotes */,
 				21F5DC222CE5304900DE7736 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				21F5DC212CE5304900DE7736 /* ProNote.app */,
+				217054F32E3C44B60000B9DA /* PowerNotes.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -54,6 +69,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		217054F22E3C44B60000B9DA /* PowerNotes */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 217054FD2E3C44B80000B9DA /* Build configuration list for PBXNativeTarget "PowerNotes" */;
+			buildPhases = (
+				217054EF2E3C44B60000B9DA /* Sources */,
+				217054F02E3C44B60000B9DA /* Frameworks */,
+				217054F12E3C44B60000B9DA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				217054F42E3C44B60000B9DA /* PowerNotes */,
+			);
+			name = PowerNotes;
+			packageProductDependencies = (
+			);
+			productName = PowerNotes;
+			productReference = 217054F32E3C44B60000B9DA /* PowerNotes.app */;
+			productType = "com.apple.product-type.application";
+		};
 		21F5DC202CE5304800DE7736 /* ProNote */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 21F5DC2F2CE5304B00DE7736 /* Build configuration list for PBXNativeTarget "ProNote" */;
@@ -83,9 +120,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1610;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1610;
 				TargetAttributes = {
+					217054F22E3C44B60000B9DA = {
+						CreatedOnToolsVersion = 16.4;
+					};
 					21F5DC202CE5304800DE7736 = {
 						CreatedOnToolsVersion = 16.1;
 					};
@@ -106,11 +146,19 @@
 			projectRoot = "";
 			targets = (
 				21F5DC202CE5304800DE7736 /* ProNote */,
+				217054F22E3C44B60000B9DA /* PowerNotes */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		217054F12E3C44B60000B9DA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		21F5DC1F2CE5304800DE7736 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -122,6 +170,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		217054EF2E3C44B60000B9DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		21F5DC1D2CE5304800DE7736 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -132,6 +187,70 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		217054FB2E3C44B80000B9DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W29Q2GKBT5;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.harrydinh.PowerNotes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		217054FC2E3C44B80000B9DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W29Q2GKBT5;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.harrydinh.PowerNotes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		21F5DC2D2CE5304B00DE7736 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -277,6 +396,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reconnect.ProNote;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -309,6 +431,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reconnect.ProNote;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -318,6 +443,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		217054FD2E3C44B80000B9DA /* Build configuration list for PBXNativeTarget "PowerNotes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				217054FB2E3C44B80000B9DA /* Debug */,
+				217054FC2E3C44B80000B9DA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		21F5DC1C2CE5304800DE7736 /* Build configuration list for PBXProject "ProNote" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
