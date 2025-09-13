@@ -20,6 +20,18 @@ struct SystemFolderView: View {
                 // Folder content here...
             }
             .navigationTitle(folder.systemTab.rawValue)
+            .toolbarRole(.browser)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    newItemButton
+                }
+            }
+        }
+    }
+
+    private var newItemButton: some View {
+        Button(action: {}) {
+            Image(systemName: "plus")
         }
     }
 }
