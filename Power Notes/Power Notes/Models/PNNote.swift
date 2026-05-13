@@ -13,7 +13,7 @@ import PaperKit
 final class PNNote {
     @Attribute(.unique) var id: UUID
     var name: String
-    var paperMarkup: PaperMarkup?
+    @Transient var paperMarkup: PaperMarkup?
     var markdownText: String?
     var createdOn: Date?
     var lastEdited: Date?
