@@ -1,7 +1,32 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld notes" : {
+
+    },
+    "%lld notes • %lld folders" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld notes • %2$lld folders"
+          }
+        }
+      }
+    },
     "Folders" : {
+
+    },
+    "My Folders" : {
+
+    },
+    "No Folder Selected" : {
+
+    },
+    "No Note Selected" : {
+
+    },
+    "Notes" : {
 
     }
   },
