@@ -14,10 +14,19 @@
         }
       }
     },
+    "Create" : {
+
+    },
+    "Create New Folder" : {
+
+    },
     "Folders" : {
 
     },
     "My Folders" : {
+
+    },
+    "New Folder" : {
 
     },
     "No Folder Selected" : {

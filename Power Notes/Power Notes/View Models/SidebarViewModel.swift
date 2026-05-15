@@ -11,4 +11,6 @@ import Foundation
 @Observable
 class SidebarViewModel {
     var selectedSidebarItem: UUID?
+    var showNewFolderAlert = false
+    var newFolderName = ""
 }

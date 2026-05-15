@@ -33,6 +33,12 @@ struct ContentView: View {
                     sidebarViewModel.selectedSidebarItem = inboxFolder.uuid
                 }
             }
+            // MARK: Sidebar Toolbar
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    newFolderButton
+                }
+            }
         } content: {
             if let selectedFolder {
                 FolderDetailView(folder: selectedFolder)
@@ -42,7 +48,33 @@ struct ContentView: View {
         } detail: {
             ContentUnavailableView("No Note Selected", systemImage: "note.text")
         }
+        .alert(
+            "Create New Folder",
+            isPresented: $sidebarViewModel.showNewFolderAlert
+        ) {
+            TextField("New Folder", text: $sidebarViewModel.newFolderName)
+            Button(role: .cancel) {
+                sidebarViewModel.newFolderName = ""
+            }
+            Button("Create", role: .confirm) {
+                sidebarViewModel.newFolderName = ""
+            }
+            .keyboardShortcut(.defaultAction)
+            .disabled(sidebarViewModel.newFolderName.isEmpty)
+        }
     }
+    
+    // MARK: - Subviews
+    
+    private var newFolderButton: some View {
+        Button(action: {
+            sidebarViewModel.showNewFolderAlert = true
+        }) {
+            Label("New Folder", systemImage: "folder.badge.plus")
+        }
+    }
+    
+    // MARK: - Helper Functions and Properties
     
     private var selectedFolder: PNFolder? {
         userContentManager.staticFolders.first(where: { $0.uuid == sidebarViewModel.selectedSidebarItem })
