@@ -16,7 +16,8 @@ final class PNFolder {
     
     @Relationship(deleteRule: .cascade) var subfolders: [PNFolder]?
     
-    @Relationship(deleteRule: .cascade) var notes: [PNNote]?
+    @Relationship(deleteRule: .cascade, inverse: \PNNote.parentFolder)
+    var notes: [PNNote]?
     
     @Transient var subfoldersCount: Int {
         guard let subfolders else { return 0 }

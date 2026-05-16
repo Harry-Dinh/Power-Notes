@@ -10,6 +10,8 @@ import SwiftUI
 struct FolderDetailView: View {
     @Binding var folder: PNFolder
     
+    @State private var folderDetailViewModel = FolderDetailViewModel()
+    
     init(folder: Binding<PNFolder>) {
         self._folder = folder
     }
@@ -26,6 +28,24 @@ struct FolderDetailView: View {
             folder.subfoldersCount == 0 ?
             "\(folder.noteCount) notes" : "\(folder.noteCount) notes • \(folder.subfoldersCount) folders"
         )
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                createNoteButton
+            }
+        }
+        .alert(
+            "Create New Note",
+            isPresented: $folderDetailViewModel.showNewNoteNameAlert
+        ) {
+            TextField("New Note", text: $folderDetailViewModel.newNoteName)
+            
+            Button(role: .cancel) { folderDetailViewModel.newNoteName = "" }
+            Button("Create", role: .confirm) {
+                let newNote = PNNote(name: folderDetailViewModel.newNoteName)
+                folder.notes?.append(newNote)
+                folderDetailViewModel.newNoteName = ""
+            }
+        }
     }
     
     @ViewBuilder
@@ -47,6 +67,15 @@ struct FolderDetailView: View {
                     Label(note.name, systemImage: "note.text")
                 }
             }
+        }
+    }
+    
+    private var createNoteButton: some View {
+        Button(action: {
+            folderDetailViewModel.newNoteName = Constants.placeholderNewNoteName
+            folderDetailViewModel.showNewNoteNameAlert = true
+        }) {
+            Label("New Note", systemImage: "square.and.pencil")
         }
     }
 }

@@ -99,6 +99,10 @@ struct ContentView: View {
                     modelContext.delete(selectedFolderForDeletion)
                     try? modelContext.save()
                 }
+                
+                if sidebarViewModel.selectedFolder == sidebarViewModel.selectedFolderForDeletion {
+                    sidebarViewModel.selectedFolder = nil
+                }
                 sidebarViewModel.selectedFolderForDeletion = nil
             }
         }

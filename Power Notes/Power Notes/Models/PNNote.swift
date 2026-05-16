@@ -13,6 +13,7 @@ import PDFKit
 final class PNNote {
     @Attribute(.unique) var id: UUID
     var name: String
+    var parentFolder: PNFolder?
     
     var pdfData: Data?
     @Transient var pdfDocument: PDFDocument? {
