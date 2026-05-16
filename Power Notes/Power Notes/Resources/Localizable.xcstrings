@@ -20,7 +20,19 @@
     "Create New Folder" : {
 
     },
+    "Delete" : {
+
+    },
+    "Delete \"%@\"?" : {
+
+    },
+    "Delete..." : {
+
+    },
     "Folders" : {
+
+    },
+    "My Folders" : {
 
     },
     "New Folder" : {

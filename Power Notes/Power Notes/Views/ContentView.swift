@@ -9,11 +9,12 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(UserContentManager.self) private var userContentManager
     @Environment(SidebarViewModel.self) private var sidebarViewModel
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.horizontalSizeClass) private var hSizeClass
     
     @Query private var userFolders: [PNFolder]
+    @Query private var userNotes: [PNNote]
     
     var body: some View {
         @Bindable var sidebarViewModel = sidebarViewModel
@@ -26,9 +27,19 @@ struct ContentView: View {
                     }
                 }
                 
-                List(userFolders, selection: $sidebarViewModel.selectedFolder) { folder in
-                    NavigationLink(value: folder) {
-                        folderRowView(folder)
+                List(selection: $sidebarViewModel.selectedFolder) {
+                    Section {
+                        if let inboxFolder = userFolders.first(where: { $0.isInboxFolder }) {
+                            folderRowView(inboxFolder)
+                        }
+                    }
+                    
+                    Section("My Folders") {
+                        ForEach(userFolders) { userFolder in
+                            if !userFolder.isInboxFolder {
+                                folderRowView(userFolder)
+                            }
+                        }
                     }
                 }
             }
@@ -38,6 +49,17 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     newFolderButton
+                }
+            }
+            .onAppear {
+                if (userFolders.isEmpty && userNotes.isEmpty) || !userFolders.contains(where: { $0.isInboxFolder }) {
+                    let inboxFolder = PNFolder(uuid: Constants.inboxFolderUUID, name: "Inbox")
+                    modelContext.insert(inboxFolder)
+                    try? modelContext.save()
+                }
+                
+                if sidebarViewModel.selectedFolder == nil && hSizeClass == .regular {
+                    sidebarViewModel.selectedFolder = userFolders.first(where: { $0.isInboxFolder })
                 }
             }
         } detail: {
@@ -56,13 +78,29 @@ struct ContentView: View {
                 sidebarViewModel.newFolderName = ""
             }
             Button("Create", role: .confirm) {
-                let createdFolder = PNFolder(name: sidebarViewModel.newFolderName, iconName: "folder")
+                let createdFolder = PNFolder(name: sidebarViewModel.newFolderName)
                 modelContext.insert(createdFolder)
                 try? modelContext.save()
                 sidebarViewModel.newFolderName = ""
             }
             .keyboardShortcut(.defaultAction)
             .disabled(sidebarViewModel.newFolderName.isEmpty)
+        }
+        .alert(
+            "Delete \"\(sidebarViewModel.selectedFolderForDeletion?.name ?? PNFolder.placeholder.name)\"?",
+            isPresented: $sidebarViewModel.showFolderDeletionAlert
+        ) {
+            Button(role: .cancel) {
+                sidebarViewModel.selectedFolderForDeletion = nil
+            }
+            
+            Button("Delete", role: .destructive) {
+                if let selectedFolderForDeletion = sidebarViewModel.selectedFolderForDeletion {
+                    modelContext.delete(selectedFolderForDeletion)
+                    try? modelContext.save()
+                }
+                sidebarViewModel.selectedFolderForDeletion = nil
+            }
         }
     }
     
@@ -76,11 +114,35 @@ struct ContentView: View {
         }
     }
     
+    @ViewBuilder
     private func folderRowView(_ folder: PNFolder) -> some View {
-        Label(
-            folder.name,
-            systemImage: folder.uuid == Constants.inboxFolderUUID ? "tray" : "folder"
-        )
+        if folder.isInboxFolder {
+            NavigationLink(value: folder) {
+                Label(
+                    folder.name,
+                    systemImage: folder.isInboxFolder ? "tray" : "folder"
+                )
+            }
+        } else {
+            NavigationLink(value: folder) {
+                Label(
+                    folder.name,
+                    systemImage: folder.isInboxFolder ? "tray" : "folder"
+                )
+            }
+            .contextMenu {
+                deleteFolderButton(folder)
+            }
+        }
+    }
+    
+    private func deleteFolderButton(_ folder: PNFolder) -> some View {
+        Button(role: .destructive, action: {
+            sidebarViewModel.selectedFolderForDeletion = folder
+            sidebarViewModel.showFolderDeletionAlert = true
+        }) {
+            Label("Delete...", systemImage: "trash")
+        }
     }
     
     // MARK: - Helper Functions and Properties
@@ -92,10 +154,6 @@ struct ContentView: View {
             sidebarViewModel.selectedFolder = newValue
         }
         return bindedFolder
-    }
-    
-    private var inboxFolder: PNFolder {
-        userContentManager.staticFolders[0]
     }
 }
 

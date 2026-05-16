@@ -13,4 +13,6 @@ class SidebarViewModel {
     var selectedFolder: PNFolder?
     var showNewFolderAlert = false
     var newFolderName = ""
+    var selectedFolderForDeletion: PNFolder?
+    var showFolderDeletionAlert = false
 }
