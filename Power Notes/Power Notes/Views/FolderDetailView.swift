@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct FolderDetailView: View {
-    @State var folder: PNFolder
+    @Binding var folder: PNFolder
     
-    init(folder: PNFolder) {
-        self.folder = folder
+    init(folder: Binding<PNFolder>) {
+        self._folder = folder
     }
     
     var body: some View {
@@ -52,5 +52,5 @@ struct FolderDetailView: View {
 }
 
 #Preview(traits: .landscapeLeft) {
-    FolderDetailView(folder: .placeholder)
+    FolderDetailView(folder: .constant(.placeholder))
 }

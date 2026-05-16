@@ -6,47 +6,46 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
     @Environment(UserContentManager.self) private var userContentManager
     @Environment(SidebarViewModel.self) private var sidebarViewModel
+    @Environment(\.modelContext) private var modelContext
+    
+    @Query private var userFolders: [PNFolder]
     
     var body: some View {
         @Bindable var sidebarViewModel = sidebarViewModel
         
         NavigationSplitView {
-            List(selection: $sidebarViewModel.selectedSidebarItem) {
-                Section {
-                    NavigationLink(value: inboxFolder.uuid) {
-                        Label(inboxFolder.name, systemImage: "tray")
+            ZStack {
+                if userFolders.isEmpty {
+                    ContentUnavailableView {
+                        Text("No Folders")
                     }
                 }
                 
-                Section("My Folders") {
-                    // TODO: User folders here... (future implementation)
+                List(userFolders, selection: $sidebarViewModel.selectedFolder) { folder in
+                    NavigationLink(value: folder) {
+                        folderRowView(folder)
+                    }
                 }
             }
             .listStyle(.sidebar)
             .navigationTitle("Folders")
-            .onAppear {
-                if sidebarViewModel.selectedSidebarItem == nil {
-                    sidebarViewModel.selectedSidebarItem = inboxFolder.uuid
-                }
-            }
             // MARK: Sidebar Toolbar
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     newFolderButton
                 }
             }
-        } content: {
-            if let selectedFolder {
-                FolderDetailView(folder: selectedFolder)
+        } detail: {
+            if let selectedFolder = sidebarViewModel.selectedFolder {
+                FolderDetailView(folder: selectedFolderBinding(for: selectedFolder))
             } else {
                 ContentUnavailableView("No Folder Selected", systemImage: "folder")
             }
-        } detail: {
-            ContentUnavailableView("No Note Selected", systemImage: "note.text")
         }
         .alert(
             "Create New Folder",
@@ -57,6 +56,9 @@ struct ContentView: View {
                 sidebarViewModel.newFolderName = ""
             }
             Button("Create", role: .confirm) {
+                let createdFolder = PNFolder(name: sidebarViewModel.newFolderName, iconName: "folder")
+                modelContext.insert(createdFolder)
+                try? modelContext.save()
                 sidebarViewModel.newFolderName = ""
             }
             .keyboardShortcut(.defaultAction)
@@ -74,10 +76,22 @@ struct ContentView: View {
         }
     }
     
+    private func folderRowView(_ folder: PNFolder) -> some View {
+        Label(
+            folder.name,
+            systemImage: folder.uuid == Constants.inboxFolderUUID ? "tray" : "folder"
+        )
+    }
+    
     // MARK: - Helper Functions and Properties
     
-    private var selectedFolder: PNFolder? {
-        userContentManager.staticFolders.first(where: { $0.uuid == sidebarViewModel.selectedSidebarItem })
+    private func selectedFolderBinding(for folder: PNFolder) -> Binding<PNFolder> {
+        let bindedFolder = Binding {
+            return folder
+        } set: { newValue in
+            sidebarViewModel.selectedFolder = newValue
+        }
+        return bindedFolder
     }
     
     private var inboxFolder: PNFolder {
