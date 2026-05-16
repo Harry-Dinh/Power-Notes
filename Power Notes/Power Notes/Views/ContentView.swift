@@ -6,50 +6,154 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
-    @Environment(UserContentManager.self) private var userContentManager
     @Environment(SidebarViewModel.self) private var sidebarViewModel
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.horizontalSizeClass) private var hSizeClass
+    
+    @Query private var userFolders: [PNFolder]
+    @Query private var userNotes: [PNNote]
     
     var body: some View {
         @Bindable var sidebarViewModel = sidebarViewModel
         
         NavigationSplitView {
-            List(selection: $sidebarViewModel.selectedSidebarItem) {
-                Section {
-                    NavigationLink(value: inboxFolder.uuid) {
-                        Label(inboxFolder.name, systemImage: "tray")
+            ZStack {
+                if userFolders.isEmpty {
+                    ContentUnavailableView {
+                        Text("No Folders")
                     }
                 }
                 
-                Section("My Folders") {
-                    // TODO: User folders here... (future implementation)
+                List(selection: $sidebarViewModel.selectedFolder) {
+                    Section {
+                        if let inboxFolder = userFolders.first(where: { $0.isInboxFolder }) {
+                            folderRowView(inboxFolder)
+                        }
+                    }
+                    
+                    Section("My Folders") {
+                        ForEach(userFolders) { userFolder in
+                            if !userFolder.isInboxFolder {
+                                folderRowView(userFolder)
+                            }
+                        }
+                    }
                 }
             }
             .listStyle(.sidebar)
             .navigationTitle("Folders")
-            .onAppear {
-                if sidebarViewModel.selectedSidebarItem == nil {
-                    sidebarViewModel.selectedSidebarItem = inboxFolder.uuid
+            // MARK: Sidebar Toolbar
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    newFolderButton
                 }
             }
-        } content: {
-            if let selectedFolder {
-                FolderDetailView(folder: selectedFolder)
+            .onAppear {
+                if (userFolders.isEmpty && userNotes.isEmpty) || !userFolders.contains(where: { $0.isInboxFolder }) {
+                    let inboxFolder = PNFolder(uuid: Constants.inboxFolderUUID, name: "Inbox")
+                    modelContext.insert(inboxFolder)
+                    try? modelContext.save()
+                }
+                
+                if sidebarViewModel.selectedFolder == nil && hSizeClass == .regular {
+                    sidebarViewModel.selectedFolder = userFolders.first(where: { $0.isInboxFolder })
+                }
+            }
+        } detail: {
+            if let selectedFolder = sidebarViewModel.selectedFolder {
+                FolderDetailView(folder: selectedFolderBinding(for: selectedFolder))
             } else {
                 ContentUnavailableView("No Folder Selected", systemImage: "folder")
             }
-        } detail: {
-            ContentUnavailableView("No Note Selected", systemImage: "note.text")
+        }
+        .alert(
+            "Create New Folder",
+            isPresented: $sidebarViewModel.showNewFolderAlert
+        ) {
+            TextField("New Folder", text: $sidebarViewModel.newFolderName)
+            Button(role: .cancel) {
+                sidebarViewModel.newFolderName = ""
+            }
+            Button("Create", role: .confirm) {
+                let createdFolder = PNFolder(name: sidebarViewModel.newFolderName)
+                modelContext.insert(createdFolder)
+                try? modelContext.save()
+                sidebarViewModel.newFolderName = ""
+            }
+            .keyboardShortcut(.defaultAction)
+            .disabled(sidebarViewModel.newFolderName.isEmpty)
+        }
+        .alert(
+            "Delete \"\(sidebarViewModel.selectedFolderForDeletion?.name ?? PNFolder.placeholder.name)\"?",
+            isPresented: $sidebarViewModel.showFolderDeletionAlert
+        ) {
+            Button(role: .cancel) {
+                sidebarViewModel.selectedFolderForDeletion = nil
+            }
+            
+            Button("Delete", role: .destructive) {
+                if let selectedFolderForDeletion = sidebarViewModel.selectedFolderForDeletion {
+                    modelContext.delete(selectedFolderForDeletion)
+                    try? modelContext.save()
+                }
+                sidebarViewModel.selectedFolderForDeletion = nil
+            }
         }
     }
     
-    private var selectedFolder: PNFolder? {
-        userContentManager.staticFolders.first(where: { $0.uuid == sidebarViewModel.selectedSidebarItem })
+    // MARK: - Subviews
+    
+    private var newFolderButton: some View {
+        Button(action: {
+            sidebarViewModel.showNewFolderAlert = true
+        }) {
+            Label("New Folder", systemImage: "folder.badge.plus")
+        }
     }
     
-    private var inboxFolder: PNFolder {
-        userContentManager.staticFolders[0]
+    @ViewBuilder
+    private func folderRowView(_ folder: PNFolder) -> some View {
+        if folder.isInboxFolder {
+            NavigationLink(value: folder) {
+                Label(
+                    folder.name,
+                    systemImage: folder.isInboxFolder ? "tray" : "folder"
+                )
+            }
+        } else {
+            NavigationLink(value: folder) {
+                Label(
+                    folder.name,
+                    systemImage: folder.isInboxFolder ? "tray" : "folder"
+                )
+            }
+            .contextMenu {
+                deleteFolderButton(folder)
+            }
+        }
+    }
+    
+    private func deleteFolderButton(_ folder: PNFolder) -> some View {
+        Button(role: .destructive, action: {
+            sidebarViewModel.selectedFolderForDeletion = folder
+            sidebarViewModel.showFolderDeletionAlert = true
+        }) {
+            Label("Delete...", systemImage: "trash")
+        }
+    }
+    
+    // MARK: - Helper Functions and Properties
+    
+    private func selectedFolderBinding(for folder: PNFolder) -> Binding<PNFolder> {
+        let bindedFolder = Binding {
+            return folder
+        } set: { newValue in
+            sidebarViewModel.selectedFolder = newValue
+        }
+        return bindedFolder
     }
 }
 
