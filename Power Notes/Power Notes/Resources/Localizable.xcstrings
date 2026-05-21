@@ -1,7 +1,68 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Hello, world!" : {
+    "%lld" : {
+
+    },
+    "%lld notes" : {
+
+    },
+    "%lld notes • %lld folders" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld notes • %2$lld folders"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+
+    },
+    "Create" : {
+
+    },
+    "Create New Folder" : {
+
+    },
+    "Create New Note" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Delete \"%@\"?" : {
+
+    },
+    "Delete Note" : {
+
+    },
+    "Delete..." : {
+
+    },
+    "Folders" : {
+
+    },
+    "My Folders" : {
+
+    },
+    "New Folder" : {
+
+    },
+    "New Note" : {
+
+    },
+    "No Folder Selected" : {
+
+    },
+    "No Folders" : {
+
+    },
+    "Notes" : {
+
+    },
+    "Place new note in:" : {
 
     }
   },

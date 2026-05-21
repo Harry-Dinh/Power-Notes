@@ -1,0 +1,102 @@
+//
+//  FolderDetailView.swift
+//  Power Notes
+//
+//  Created by Harry Dinh on 2026-05-15.
+//
+
+import SwiftUI
+import SwiftData
+
+struct FolderDetailView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(SidebarViewModel.self) private var sidebarViewModel
+    
+    @Binding var folder: PNFolder
+    
+    @State private var folderDetailViewModel = FolderDetailViewModel()
+    
+    init(folder: Binding<PNFolder>) {
+        self._folder = folder
+    }
+    
+    var body: some View {
+        @Bindable var sidebarViewModel = sidebarViewModel
+        
+        ZStack {
+            Color(
+                colorScheme == .light ?
+                    .tertiarySystemGroupedBackground : .systemBackground
+            )
+                .ignoresSafeArea()
+            
+            if folder.noteCount != 0 || folder.subfoldersCount != 0 {
+                List {
+                    subfoldersSection
+                    notesSection
+                }
+                .listRowBackground(Color.clear)
+            }
+        }
+        .navigationTitle(folder.name)
+        .navigationSubtitle(
+            folder.subfoldersCount == 0 ?
+            "\(folder.noteCount) notes" : "\(folder.noteCount) notes • \(folder.subfoldersCount) folders"
+        )
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                createNoteButton
+            }
+        }
+        .sheet(isPresented: $sidebarViewModel.showNewNoteCreationSheet) {
+            NewNoteView(folderDetailViewModel)
+        }
+    }
+    
+    @ViewBuilder
+    private var subfoldersSection: some View {
+        if let subfolders = folder.subfolders, !subfolders.isEmpty {
+            Section("Folders") {
+                ForEach(subfolders) { subfolder in
+                    Label(subfolder.name, systemImage: "folder")
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var notesSection: some View {
+        if let notes = folder.notes, !notes.isEmpty {
+            Section("Notes") {
+                ForEach(notes) { note in
+                    Label(note.name, systemImage: "note.text")
+                        .contextMenu {
+                            deleteNoteButton(with: note)
+                        }
+                }
+            }
+        }
+    }
+    
+    private var createNoteButton: some View {
+        Button(action: {
+            sidebarViewModel.showNewNoteCreationSheet = true
+        }) {
+            Label("New Note", systemImage: "square.and.pencil")
+        }
+    }
+    
+    private func deleteNoteButton(with note: PNNote) -> some View {
+        Button(role: .destructive, action: {
+            modelContext.delete(note)
+            try? modelContext.save()
+        }) {
+            Label("Delete Note", systemImage: "trash")
+        }
+    }
+}
+
+#Preview(traits: .landscapeLeft) {
+    FolderDetailView(folder: .constant(.placeholder))
+}
