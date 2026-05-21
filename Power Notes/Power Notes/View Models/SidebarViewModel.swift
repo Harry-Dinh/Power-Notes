@@ -12,6 +12,7 @@ import Foundation
 class SidebarViewModel {
     var selectedFolder: PNFolder?
     var showNewFolderAlert = false
+    var showNewNoteCreationSheet = false
     var newFolderName = ""
     var selectedFolderForDeletion: PNFolder?
     var showFolderDeletionAlert = false

@@ -23,5 +23,23 @@ struct Power_NotesApp: App {
                 .environment(sidebarViewModel)
         }
         .modelContainer(for: persistentModels)
+        .commands {
+            CommandGroup(replacing: .newItem) {
+                Button(action: {
+                    sidebarViewModel.showNewNoteCreationSheet = true
+                }) {
+                    Label("New Note", systemImage: "square.and.pencil")
+                }
+                .keyboardShortcut("N")
+                .disabled(sidebarViewModel.selectedFolder == nil)
+                
+                Button(action: {
+                    sidebarViewModel.showNewFolderAlert = true
+                }) {
+                    Label("New Folder", systemImage: "folder.badge.plus")
+                }
+                .keyboardShortcut("N", modifiers: [.command, .shift])
+            }
+        }
     }
 }

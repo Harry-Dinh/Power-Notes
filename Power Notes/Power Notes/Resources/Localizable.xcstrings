@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld" : {
+
+    },
     "%lld notes" : {
 
     },
@@ -14,16 +17,25 @@
         }
       }
     },
+    "Cancel" : {
+
+    },
     "Create" : {
 
     },
     "Create New Folder" : {
 
     },
+    "Create New Note" : {
+
+    },
     "Delete" : {
 
     },
     "Delete \"%@\"?" : {
+
+    },
+    "Delete Note" : {
 
     },
     "Delete..." : {
@@ -38,6 +50,9 @@
     "New Folder" : {
 
     },
+    "New Note" : {
+
+    },
     "No Folder Selected" : {
 
     },
@@ -45,6 +60,9 @@
 
     },
     "Notes" : {
+
+    },
+    "Place new note in:" : {
 
     }
   },
