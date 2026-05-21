@@ -11,9 +11,14 @@ import Foundation
 @Observable
 class SidebarViewModel {
     var selectedFolder: PNFolder?
+    var selectedFolderForDeletion: PNFolder?
+    var selectedFolderForRename: PNFolder?
+    
     var showNewFolderAlert = false
     var showNewNoteCreationSheet = false
-    var newFolderName = ""
-    var selectedFolderForDeletion: PNFolder?
     var showFolderDeletionAlert = false
+    var showFolderRenameAlert = false
+    
+    var newFolderName = ""
+    var renameFolderName = ""
 }

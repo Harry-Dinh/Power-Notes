@@ -69,6 +69,7 @@ struct ContentView: View {
                 ContentUnavailableView("No Folder Selected", systemImage: "folder")
             }
         }
+        // MARK: Alerts
         .alert(
             "Create New Folder",
             isPresented: $sidebarViewModel.showNewFolderAlert
@@ -104,6 +105,22 @@ struct ContentView: View {
                     sidebarViewModel.selectedFolder = nil
                 }
                 sidebarViewModel.selectedFolderForDeletion = nil
+            }
+        }
+        .alert(
+            "Rename Folder",
+            isPresented: $sidebarViewModel.showFolderRenameAlert
+        ) {
+            if let selectedFolder = Binding($sidebarViewModel.selectedFolderForRename) {
+                TextField("Folder name", text: selectedFolder.name)
+                Button(role: .cancel) {
+                    // TODO: Might want to do something here to prevent new name from saving
+                }
+                Button(role: .confirm, action: {}) {
+                    Text("Rename")
+                }
+                .keyboardShortcut(.defaultAction)
+                .disabled(selectedFolder.wrappedValue.name.isEmpty)
             }
         }
     }
@@ -143,6 +160,7 @@ struct ContentView: View {
                 }
             }
             .contextMenu {
+                renameFolderButton(folder)
                 deleteFolderButton(folder)
             }
         }
@@ -154,6 +172,15 @@ struct ContentView: View {
             sidebarViewModel.showFolderDeletionAlert = true
         }) {
             Label("Delete...", systemImage: "trash")
+        }
+    }
+    
+    private func renameFolderButton(_ folder: PNFolder) -> some View {
+        Button(action: {
+            sidebarViewModel.selectedFolderForRename = folder
+            sidebarViewModel.showFolderRenameAlert = true
+        }) {
+            Label("Rename...", systemImage: "pencil")
         }
     }
     
