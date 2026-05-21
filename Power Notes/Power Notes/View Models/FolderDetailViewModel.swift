@@ -9,6 +9,5 @@ import Foundation
 
 @Observable
 class FolderDetailViewModel {
-    var showNewNoteNameAlert = false
     var newNoteName = ""
 }

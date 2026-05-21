@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld" : {
+
+    },
     "%lld notes" : {
 
     },
@@ -13,6 +16,9 @@
           }
         }
       }
+    },
+    "Cancel" : {
+
     },
     "Create" : {
 
@@ -27,6 +33,9 @@
 
     },
     "Delete \"%@\"?" : {
+
+    },
+    "Delete Note" : {
 
     },
     "Delete..." : {
@@ -51,6 +60,9 @@
 
     },
     "Notes" : {
+
+    },
+    "Place new note in:" : {
 
     }
   },

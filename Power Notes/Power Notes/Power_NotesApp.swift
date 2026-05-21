@@ -26,7 +26,7 @@ struct Power_NotesApp: App {
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button(action: {
-                    // TODO: Implement this after implementing the new note creation view
+                    sidebarViewModel.showNewNoteCreationSheet = true
                 }) {
                     Label("New Note", systemImage: "square.and.pencil")
                 }

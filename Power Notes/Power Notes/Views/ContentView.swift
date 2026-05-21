@@ -122,17 +122,25 @@ struct ContentView: View {
     private func folderRowView(_ folder: PNFolder) -> some View {
         if folder.isInboxFolder {
             NavigationLink(value: folder) {
-                Label(
-                    folder.name,
-                    systemImage: folder.isInboxFolder ? "tray" : "folder"
-                )
+                LabeledContent {
+                    Text("\(folder.noteCount)")
+                } label: {
+                    Label(
+                        folder.name,
+                        systemImage: folder.isInboxFolder ? "tray" : "folder"
+                    )
+                }
             }
         } else {
             NavigationLink(value: folder) {
-                Label(
-                    folder.name,
-                    systemImage: folder.isInboxFolder ? "tray" : "folder"
-                )
+                LabeledContent {
+                    Text("\(folder.noteCount)")
+                } label: {
+                    Label(
+                        folder.name,
+                        systemImage: folder.isInboxFolder ? "tray" : "folder"
+                    )
+                }
             }
             .contextMenu {
                 deleteFolderButton(folder)

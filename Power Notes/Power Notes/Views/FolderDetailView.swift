@@ -6,8 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct FolderDetailView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(SidebarViewModel.self) private var sidebarViewModel
+    
     @Binding var folder: PNFolder
     
     @State private var folderDetailViewModel = FolderDetailViewModel()
@@ -17,10 +22,21 @@ struct FolderDetailView: View {
     }
     
     var body: some View {
+        @Bindable var sidebarViewModel = sidebarViewModel
+        
         ZStack {
-            List {
-                subfoldersSection
-                notesSection
+            Color(
+                colorScheme == .light ?
+                    .tertiarySystemGroupedBackground : .systemBackground
+            )
+                .ignoresSafeArea()
+            
+            if folder.noteCount != 0 || folder.subfoldersCount != 0 {
+                List {
+                    subfoldersSection
+                    notesSection
+                }
+                .listRowBackground(Color.clear)
             }
         }
         .navigationTitle(folder.name)
@@ -33,18 +49,8 @@ struct FolderDetailView: View {
                 createNoteButton
             }
         }
-        .alert(
-            "Create New Note",
-            isPresented: $folderDetailViewModel.showNewNoteNameAlert
-        ) {
-            TextField("New Note", text: $folderDetailViewModel.newNoteName)
-            
-            Button(role: .cancel) { folderDetailViewModel.newNoteName = "" }
-            Button("Create", role: .confirm) {
-                let newNote = PNNote(name: folderDetailViewModel.newNoteName)
-                folder.notes?.append(newNote)
-                folderDetailViewModel.newNoteName = ""
-            }
+        .sheet(isPresented: $sidebarViewModel.showNewNoteCreationSheet) {
+            NewNoteView(folderDetailViewModel)
         }
     }
     
@@ -65,6 +71,9 @@ struct FolderDetailView: View {
             Section("Notes") {
                 ForEach(notes) { note in
                     Label(note.name, systemImage: "note.text")
+                        .contextMenu {
+                            deleteNoteButton(with: note)
+                        }
                 }
             }
         }
@@ -72,10 +81,18 @@ struct FolderDetailView: View {
     
     private var createNoteButton: some View {
         Button(action: {
-            folderDetailViewModel.newNoteName = Constants.placeholderNewNoteName
-            folderDetailViewModel.showNewNoteNameAlert = true
+            sidebarViewModel.showNewNoteCreationSheet = true
         }) {
             Label("New Note", systemImage: "square.and.pencil")
+        }
+    }
+    
+    private func deleteNoteButton(with note: PNNote) -> some View {
+        Button(role: .destructive, action: {
+            modelContext.delete(note)
+            try? modelContext.save()
+        }) {
+            Label("Delete Note", systemImage: "trash")
         }
     }
 }
