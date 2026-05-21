@@ -69,6 +69,7 @@ struct ContentView: View {
                 ContentUnavailableView("No Folder Selected", systemImage: "folder")
             }
         }
+        // MARK: Alerts
         .alert(
             "Create New Folder",
             isPresented: $sidebarViewModel.showNewFolderAlert
@@ -104,6 +105,24 @@ struct ContentView: View {
                     sidebarViewModel.selectedFolder = nil
                 }
                 sidebarViewModel.selectedFolderForDeletion = nil
+            }
+        }
+        .alert(
+            "Rename Folder",
+            isPresented: $sidebarViewModel.showFolderRenameAlert
+        ) {
+            if let selectedFolder = Binding($sidebarViewModel.selectedFolderForRename) {
+                TextField("Folder name", text: selectedFolder.name)
+                Button(role: .cancel) {
+                    selectedFolder.wrappedValue.name = sidebarViewModel.renameFolderOldName
+                }
+                Button(role: .confirm, action: {
+                    sidebarViewModel.renameFolderOldName = ""
+                }) {
+                    Text("Rename")
+                }
+                .keyboardShortcut(.defaultAction)
+                .disabled(selectedFolder.wrappedValue.name.isEmpty)
             }
         }
     }
@@ -143,6 +162,7 @@ struct ContentView: View {
                 }
             }
             .contextMenu {
+                renameFolderButton(folder)
                 deleteFolderButton(folder)
             }
         }
@@ -154,6 +174,16 @@ struct ContentView: View {
             sidebarViewModel.showFolderDeletionAlert = true
         }) {
             Label("Delete...", systemImage: "trash")
+        }
+    }
+    
+    private func renameFolderButton(_ folder: PNFolder) -> some View {
+        Button(action: {
+            sidebarViewModel.selectedFolderForRename = folder
+            sidebarViewModel.renameFolderOldName = folder.name
+            sidebarViewModel.showFolderRenameAlert = true
+        }) {
+            Label("Rename...", systemImage: "pencil")
         }
     }
     

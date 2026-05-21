@@ -41,7 +41,13 @@
     "Delete..." : {
 
     },
+    "Folder name" : {
+
+    },
     "Folders" : {
+
+    },
+    "More" : {
 
     },
     "My Folders" : {
@@ -63,6 +69,15 @@
 
     },
     "Place new note in:" : {
+
+    },
+    "Rename" : {
+
+    },
+    "Rename Folder" : {
+
+    },
+    "Rename..." : {
 
     }
   },
