@@ -20,5 +20,5 @@ class SidebarViewModel {
     var showFolderRenameAlert = false
     
     var newFolderName = ""
-    var renameFolderName = ""
+    var renameFolderOldName = ""
 }

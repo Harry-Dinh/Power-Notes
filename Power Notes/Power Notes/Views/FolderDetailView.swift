@@ -45,8 +45,9 @@ struct FolderDetailView: View {
             "\(folder.noteCount) notes" : "\(folder.noteCount) notes • \(folder.subfoldersCount) folders"
         )
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItemGroup(placement: .primaryAction) {
                 createNoteButton
+                moreMenu
             }
         }
         .sheet(isPresented: $sidebarViewModel.showNewNoteCreationSheet) {
@@ -84,6 +85,21 @@ struct FolderDetailView: View {
             sidebarViewModel.showNewNoteCreationSheet = true
         }) {
             Label("New Note", systemImage: "square.and.pencil")
+        }
+    }
+    
+    @ViewBuilder
+    private var moreMenu: some View {
+        // TODO: In the future, make sure to disable the edit buttons, not the whole menu
+        if !folder.isInboxFolder {
+            Menu {
+                Button("Rename...", systemImage: "pencil") {
+                    sidebarViewModel.selectedFolderForRename = folder
+                    sidebarViewModel.showFolderRenameAlert = true
+                }
+            } label: {
+                Label("More", systemImage: "ellipsis")
+            }
         }
     }
     

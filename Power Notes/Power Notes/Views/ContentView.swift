@@ -114,9 +114,11 @@ struct ContentView: View {
             if let selectedFolder = Binding($sidebarViewModel.selectedFolderForRename) {
                 TextField("Folder name", text: selectedFolder.name)
                 Button(role: .cancel) {
-                    // TODO: Might want to do something here to prevent new name from saving
+                    selectedFolder.wrappedValue.name = sidebarViewModel.renameFolderOldName
                 }
-                Button(role: .confirm, action: {}) {
+                Button(role: .confirm, action: {
+                    sidebarViewModel.renameFolderOldName = ""
+                }) {
                     Text("Rename")
                 }
                 .keyboardShortcut(.defaultAction)
@@ -178,6 +180,7 @@ struct ContentView: View {
     private func renameFolderButton(_ folder: PNFolder) -> some View {
         Button(action: {
             sidebarViewModel.selectedFolderForRename = folder
+            sidebarViewModel.renameFolderOldName = folder.name
             sidebarViewModel.showFolderRenameAlert = true
         }) {
             Label("Rename...", systemImage: "pencil")
