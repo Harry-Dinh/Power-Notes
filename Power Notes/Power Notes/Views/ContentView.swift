@@ -9,15 +9,18 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(SidebarViewModel.self) private var sidebarViewModel
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var hSizeClass
+    @Environment(SidebarViewModel.self) private var sidebarViewModel
+    @Environment(NoteEditingViewModel.self) private var noteEditingViewModel
+    @Environment(FolderDetailViewModel.self) private var folderDetailViewModel
     
     @Query private var userFolders: [PNFolder]
     @Query private var userNotes: [PNNote]
     
     var body: some View {
         @Bindable var sidebarViewModel = sidebarViewModel
+        @Bindable var noteEditingViewModel = noteEditingViewModel
         
         NavigationSplitView {
             ZStack {
@@ -124,6 +127,10 @@ struct ContentView: View {
                 .keyboardShortcut(.defaultAction)
                 .disabled(selectedFolder.wrappedValue.name.isEmpty)
             }
+        }
+        // MARK: Note Editing View
+        .fullScreenCover(isPresented: $noteEditingViewModel.showEditingView) {
+            NoteEditingView()
         }
     }
     
