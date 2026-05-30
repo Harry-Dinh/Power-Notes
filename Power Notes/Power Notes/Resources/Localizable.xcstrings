@@ -83,6 +83,9 @@
     "Place new note in:" : {
 
     },
+    "Redo" : {
+
+    },
     "Rename" : {
 
     },
@@ -95,10 +98,10 @@
     "Rename..." : {
 
     },
-    "Sample note" : {
+    "Shape Tools" : {
 
     },
-    "Shape Tools" : {
+    "Undo" : {
 
     }
   },

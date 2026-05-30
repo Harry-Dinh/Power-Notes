@@ -11,6 +11,8 @@ import SwiftData
 @main
 struct Power_NotesApp: App {
     @State private var sidebarViewModel = SidebarViewModel()
+    @State private var noteEditingViewModel = NoteEditingViewModel()
+    @State private var folderDetailViewModel = FolderDetailViewModel()
     
     private let persistentModels: [any PersistentModel.Type] = [
         PNFolder.self,
@@ -21,6 +23,8 @@ struct Power_NotesApp: App {
         WindowGroup {
             ContentView()
                 .environment(sidebarViewModel)
+                .environment(noteEditingViewModel)
+                .environment(folderDetailViewModel)
         }
         .modelContainer(for: persistentModels)
         .commands {
