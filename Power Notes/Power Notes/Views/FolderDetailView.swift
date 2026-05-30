@@ -53,6 +53,12 @@ struct FolderDetailView: View {
         .sheet(isPresented: $sidebarViewModel.showNewNoteCreationSheet) {
             NewNoteView(folderDetailViewModel)
         }
+        .alert(
+            "Rename Note",
+            isPresented: $folderDetailViewModel.showNoteRenameAlert
+        ) {
+            NoteRenameAlertComponents(folderDetailViewModel)
+        }
     }
     
     @ViewBuilder
@@ -73,6 +79,7 @@ struct FolderDetailView: View {
                 ForEach(notes) { note in
                     Label(note.name, systemImage: "note.text")
                         .contextMenu {
+                            renameNoteButton(for: note)
                             deleteNoteButton(with: note)
                         }
                 }
@@ -109,6 +116,12 @@ struct FolderDetailView: View {
             try? modelContext.save()
         }) {
             Label("Delete Note", systemImage: "trash")
+        }
+    }
+    
+    private func renameNoteButton(for note: PNNote) -> some View {
+        Button("Rename...", systemImage: "pencil") {
+            folderDetailViewModel.noteRenameInitAction(for: note)
         }
     }
 }

@@ -53,6 +53,6 @@ struct NoteEditingView: View {
     }
 }
 
-#Preview {
+#Preview(traits: .landscapeLeft) {
     NoteEditingView()
 }
