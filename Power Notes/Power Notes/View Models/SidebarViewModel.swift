@@ -13,6 +13,7 @@ class SidebarViewModel {
     var selectedFolder: PNFolder?
     var selectedFolderForDeletion: PNFolder?
     var selectedFolderForRename: PNFolder?
+    var newNoteType: PNNoteType?
     
     var showNewFolderAlert = false
     var showNewNoteCreationSheet = false

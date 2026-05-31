@@ -79,14 +79,16 @@ struct FolderDetailView: View {
             Section("Notes") {
                 ForEach(notes) { note in
                     Button(action: {
-                        noteEditingViewModel.currentNote = note
-                        noteEditingViewModel.showEditingView = true
+                        noteEditingViewModel.open(note)
                     }) {
-                        Label(note.name, systemImage: "note.text")
-                            .contextMenu {
-                                renameNoteButton(for: note)
-                                deleteNoteButton(with: note)
-                            }
+                        Label(
+                            note.name,
+                            systemImage: note.noteType == .typed ? "note.text" : "pencil.line"
+                        )
+                        .contextMenu {
+                            renameNoteButton(for: note)
+                            deleteNoteButton(with: note)
+                        }
                     }
                     .buttonStyle(.plain)
                 }
@@ -95,9 +97,16 @@ struct FolderDetailView: View {
     }
     
     private var createNoteButton: some View {
-        Button(action: {
-            sidebarViewModel.showNewNoteCreationSheet = true
-        }) {
+        Menu {
+            Button("New Typed Note", systemImage: "keyboard") {
+                sidebarViewModel.newNoteType = .typed
+                sidebarViewModel.showNewNoteCreationSheet = true
+            }
+            Button("New Handwritten Note", systemImage: "pencil.line") {
+                sidebarViewModel.newNoteType = .handwritten
+                sidebarViewModel.showNewNoteCreationSheet = true
+            }
+        } label: {
             Label("New Note", systemImage: "square.and.pencil")
         }
     }

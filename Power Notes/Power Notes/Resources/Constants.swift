@@ -13,4 +13,8 @@ class Constants {
     // MARK: - UserDefaults Keys
     
     static let storedSelectedSidebarItemID = "storedSelectedSidebarItemID"
+    
+    // MARK: - PDF Page Templates Specs
+    
+    static let letterSizePortraitPaper = CGSize(width: 612, height: 792)
 }

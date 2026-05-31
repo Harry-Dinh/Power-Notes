@@ -13,6 +13,11 @@ class NoteEditingViewModel {
     
     var showEditingView = false
     
+    func open(_ note: PNNote) {
+        currentNote = note
+        showEditingView = true
+    }
+    
     func cleanUpBeforeDismiss() {
         currentNote = nil
     }

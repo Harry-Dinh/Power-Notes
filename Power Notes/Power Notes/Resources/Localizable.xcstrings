@@ -29,9 +29,6 @@
     "Create New Folder" : {
 
     },
-    "Create New Note" : {
-
-    },
     "Delete" : {
 
     },
@@ -65,7 +62,13 @@
     "New Folder" : {
 
     },
+    "New Handwritten Note" : {
+
+    },
     "New Note" : {
+
+    },
+    "New Typed Note" : {
 
     },
     "No Folder Selected" : {

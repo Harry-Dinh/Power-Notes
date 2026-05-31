@@ -10,6 +10,7 @@ import SwiftData
 
 struct NewNoteView: View {
     @Environment(SidebarViewModel.self) private var sidebarViewModel
+    @Environment(NoteEditingViewModel.self) private var noteEditingViewModel
     @Environment(\.dismiss) private var dismiss
     
     @Bindable var folderDetailViewModel: FolderDetailViewModel
@@ -55,7 +56,7 @@ struct NewNoteView: View {
                     }
                 }
             }
-            .navigationTitle("Create New Note")
+            .navigationTitle(newNoteType == .typed ? "New Typed Note" : "New Handwritten Note")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -78,9 +79,12 @@ struct NewNoteView: View {
         }
     }
     
+    // MARK: - Helper Functions and Properties
+    
     private func dismissAction() {
         dismiss()
         folderDetailViewModel.newNoteName = ""
+        sidebarViewModel.newNoteType = nil
     }
     
     private func createNewNoteAction() {
@@ -93,11 +97,25 @@ struct NewNoteView: View {
             sidebarViewModel.selectedFolder = selectedFolder
         }
         
-        let newNote = PNNote(name: folderDetailViewModel.newNoteName)
+        let newNote = PNNote(name: folderDetailViewModel.newNoteName, noteType: newNoteType)
         sidebarViewModel.selectedFolder?.notes?.append(newNote)
         
         folderDetailViewModel.newNoteName = ""
         dismiss()
+        
+        // Create and assign blank page PDF document to the new note
+        if newNote.noteType == .handwritten {
+            // TODO: Change this to a template picker before assigning in the future
+            Task(priority: .userInitiated) {
+                let pdfDocument = await PDFGenerationManager.shared.makeGraphPaperPDF()
+                await MainActor.run { newNote.pdfDocument = pdfDocument }
+            }
+        }
+        noteEditingViewModel.open(newNote)
+    }
+    
+    private var newNoteType: PNNoteType {
+        sidebarViewModel.newNoteType ?? .typed
     }
 }
 
