@@ -18,11 +18,13 @@ struct NoteEditingView: View {
         
         NavigationStack {
             VStack {
-                // TODO: Note content here...
+                PDFMarkupView(note: currentNoteBindable)
+                    .ignoresSafeArea()
             }
             .navigationTitle(currentNoteBindable.name)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden()
+            .scrollEdgeEffectStyle(.hard, for: .top)
             .toolbarRole(.editor)
             // MARK: Title Toolbar
             .toolbarTitleMenu {

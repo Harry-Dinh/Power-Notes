@@ -17,6 +17,9 @@
         }
       }
     },
+    "Background Color" : {
+
+    },
     "Cancel" : {
 
     },
@@ -27,9 +30,6 @@
 
     },
     "Create New Folder" : {
-
-    },
-    "Create New Note" : {
 
     },
     "Delete" : {
@@ -56,6 +56,12 @@
     "Folders" : {
 
     },
+    "Grid Color" : {
+
+    },
+    "Line Color" : {
+
+    },
     "More" : {
 
     },
@@ -65,7 +71,13 @@
     "New Folder" : {
 
     },
+    "New Handwritten Note" : {
+
+    },
     "New Note" : {
+
+    },
+    "New Typed Note" : {
 
     },
     "No Folder Selected" : {
@@ -99,6 +111,9 @@
 
     },
     "Shape Tools" : {
+
+    },
+    "Template" : {
 
     },
     "Undo" : {
