@@ -17,7 +17,11 @@ struct NewNoteView: View {
     
     @Query private var userFolders: [PNFolder]
     @State private var selectedFolder: PNFolder?
+    
     @State private var selectedHandwrittenTemplate: PNWritingPaperTypes = .blank
+    @State private var selectedTemplateBackgroundColor: Color = .white
+    @State private var selectedTemplateLineColor: Color = .black
+    
     @FocusState private var isTextFieldFocused: Bool?
     
     init(_ folderDetailViewModel: FolderDetailViewModel) {
@@ -60,6 +64,8 @@ struct NewNoteView: View {
                 if newNoteType == .handwritten {
                     Section("Template") {
                         templatePicker
+                        pageBackgroundColorPicker
+                        pageLineColorPicker
                     }
                 }
             }
@@ -88,13 +94,19 @@ struct NewNoteView: View {
     }
     
     private var templatePicker: some View {
-        HStack(alignment: .bottom) {
-            Spacer()
-            ForEach(PNWritingPaperTypes.allCases, id: \.hashValue) { paperType in
-                templatePickerLabel(for: paperType)
+        VStack {
+            HStack(alignment: .bottom) {
                 Spacer()
+                ForEach(PNWritingPaperTypes.allCases, id: \.hashValue) { paperType in
+                    templatePickerLabel(for: paperType)
+                    Spacer()
+                }
             }
+            
+            Divider()
+                .padding(.top)
         }
+        .listRowSeparator(.hidden)
     }
     
     private func templatePickerLabel(for writingPaper: PNWritingPaperTypes) -> some View {
@@ -118,6 +130,20 @@ struct NewNoteView: View {
         }
         .onTapGesture {
             selectedHandwrittenTemplate = writingPaper
+        }
+    }
+    
+    private var pageBackgroundColorPicker: some View {
+        ColorPicker("Background Color", selection: $selectedTemplateBackgroundColor)
+    }
+    
+    @ViewBuilder
+    private var pageLineColorPicker: some View {
+        if selectedHandwrittenTemplate == .grid || selectedHandwrittenTemplate == .lined {
+            ColorPicker(
+                selectedHandwrittenTemplate == .grid ? "Grid Color" : "Line Color",
+                selection: $selectedTemplateLineColor
+            )
         }
     }
     
@@ -145,15 +171,14 @@ struct NewNoteView: View {
         folderDetailViewModel.newNoteName = ""
         dismiss()
         
-        // Create and assign blank page PDF document to the new note
-//        if newNote.noteType == .handwritten {
-//            // TODO: Change this to a template picker before assigning in the future
-//            Task(priority: .userInitiated) {
-//                let pdfDocument = await PDFGenerationManager.shared.createWritingPaperPDF()
-//                await MainActor.run { newNote.pdfDocument = pdfDocument }
-//            }
-//        }
-//        noteEditingViewModel.open(newNote)
+        // Create and assign blank or template PDF document to new handwritten note
+        if newNote.noteType == .handwritten {
+            Task(priority: .userInitiated) {
+                let pdfDocument = await PDFGenerationManager.shared.createWritingPaperPDF(for: selectedHandwrittenTemplate)
+                await MainActor.run { newNote.pdfDocument = pdfDocument }
+            }
+        }
+        noteEditingViewModel.open(newNote)
     }
     
     private func writingPaperTypeIcon(for paperType: PNWritingPaperTypes) -> Image {

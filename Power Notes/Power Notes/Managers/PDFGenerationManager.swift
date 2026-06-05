@@ -7,11 +7,12 @@
 
 import PDFKit
 import CoreGraphics
+import SwiftUI
 
 class PDFGenerationManager {
     static let shared = PDFGenerationManager()
     
-    func createWritingPaperPDF(for paperType: PNWritingPaperTypes?) async -> PDFDocument? {
+    func createWritingPaperPDF(for paperType: PNWritingPaperTypes) async -> PDFDocument? {
         let data = NSMutableData()
         
         UIGraphicsBeginPDFContextToData(
@@ -26,8 +27,7 @@ class PDFGenerationManager {
             return nil
         }
         
-        // If nil then the generated document will be blank (no line or grid)
-        if let paperType {
+        if paperType != .blank {
             drawLineOnTemplate(
                 for: paperType == .lined ? .horizontal : .bothDirections,
                 in: context,

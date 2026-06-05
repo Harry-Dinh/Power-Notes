@@ -17,6 +17,9 @@
         }
       }
     },
+    "Background Color" : {
+
+    },
     "Cancel" : {
 
     },
@@ -51,6 +54,12 @@
 
     },
     "Folders" : {
+
+    },
+    "Grid Color" : {
+
+    },
+    "Line Color" : {
 
     },
     "More" : {
