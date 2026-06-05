@@ -11,9 +11,13 @@ struct NoteEditingView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(NoteEditingViewModel.self) private var noteEditingViewModel
     @Environment(FolderDetailViewModel.self) private var folderDetailViewModel
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    
+    init() {
+        UISegmentedControl.appearance().apportionsSegmentWidthsByContent = true
+    }
     
     var body: some View {
-        @Bindable var noteEditingViewModel = noteEditingViewModel
         @Bindable var folderDetailViewModel = folderDetailViewModel
         
         NavigationStack {
@@ -36,10 +40,22 @@ struct NoteEditingView: View {
                     dismissButton
                 }
                 
-                ToolbarItemGroup(placement: .secondaryAction) {
+                if noteEditingViewModel.isToolkitVisible {
+                    ToolbarItemGroup(placement: horizontalSizeClass == .regular ? .secondaryAction : .bottomBar) {
+                        segmentedToolPicker
+                    }
+                }
+                
+                if horizontalSizeClass == .compact {
+                    ToolbarSpacer(.flexible, placement: .bottomBar)
+                }
+                
+                ToolbarItemGroup(placement: horizontalSizeClass == .regular ? .primaryAction : .bottomBar) {
                     drawingToolsToggle
                     shapesToolToggle
                 }
+                
+                ToolbarSpacer(.fixed, placement: .primaryAction)
                 
                 ToolbarItemGroup(placement: .primaryAction) {
                     undoButton
@@ -59,6 +75,10 @@ struct NoteEditingView: View {
             ) {
                 NoteRenameAlertComponents(folderDetailViewModel)
             }
+            // MARK: Other modifiers
+            .onAppear {
+                noteEditingViewModel.selectedTool = noteEditingViewModel.tools[0]
+            }
         }
     }
     
@@ -77,11 +97,14 @@ struct NoteEditingView: View {
         Button("Document Overview", systemImage: "square.grid.2x2") {}
     }
     
+    @ViewBuilder
     private var drawingToolsToggle: some View {
+        @Bindable var noteEditingViewModel = noteEditingViewModel
+        
         Toggle(
             "Drawing Tools",
             systemImage: "pencil.tip.crop.circle",
-            isOn: .constant(false)
+            isOn: $noteEditingViewModel.isToolkitVisible.animation(.bouncy)
         )
     }
     
@@ -101,7 +124,32 @@ struct NoteEditingView: View {
         Button("Redo", systemImage: "arrow.uturn.forward") {}
     }
     
+    @ViewBuilder
+    private var segmentedToolPicker: some View {
+        ForEach(noteEditingViewModel.tools) { tool in
+            Button(action: {
+                noteEditingViewModel.selectedTool = tool
+            }) {
+                Label {
+                    Text(tool.id)
+                } icon: {
+                    PNWritingTool.icon(for: tool.toolType)
+                }
+                .tag(tool.toolType)
+                .foregroundStyle(isSelectedTool(tool) ? Color.accentColor : Color.primary)
+                .padding(7)
+                .background(isSelectedTool(tool) ? Color(.secondarySystemFill) : Color.clear)
+                .clipShape(.circle)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+    
     // MARK: - Helper Functions and Properties
+    
+    private func isSelectedTool(_ tool: PNWritingTool) -> Bool {
+        return noteEditingViewModel.selectedTool?.toolType == tool.toolType
+    }
     
     private var currentNoteBindable: Binding<PNNote> {
         Binding {
