@@ -11,7 +11,7 @@ import CoreGraphics
 class PDFGenerationManager {
     static let shared = PDFGenerationManager()
     
-    func makeGraphPaperPDF() async -> PDFDocument? {
+    func createWritingPaperPDF(for paperType: PNWritingPaperTypes?) async -> PDFDocument? {
         let data = NSMutableData()
         
         UIGraphicsBeginPDFContextToData(
@@ -26,11 +26,15 @@ class PDFGenerationManager {
             return nil
         }
         
-        drawGrid(
-            in: context,
-            pageSize: Constants.letterSizePortraitPaper,
-            spacing: 20
-        )
+        // If nil then the generated document will be blank (no line or grid)
+        if let paperType {
+            drawLineOnTemplate(
+                for: paperType == .lined ? .horizontal : .bothDirections,
+                in: context,
+                pageSize: Constants.letterSizePortraitPaper,
+                spacing: 20     // TODO: Replace this with a picker
+            )
+        }
         
         UIGraphicsEndPDFContext()
         
@@ -40,7 +44,8 @@ class PDFGenerationManager {
         return finalPDFDocument
     }
     
-    private func drawGrid(
+    private func drawLineOnTemplate(
+        for direction: PNNoteTemplateDrawingDirection,
         in context: CGContext,
         pageSize: CGSize,
         spacing: CGFloat,
@@ -50,15 +55,19 @@ class PDFGenerationManager {
         context.setLineWidth(lineWidth)
         
         // Draw vertical lines
-        for x in stride(from: 0.0, to: pageSize.width, by: spacing) {
-            context.move(to: CGPoint(x: x, y: 0))
-            context.addLine(to: CGPoint(x: x, y: pageSize.height))
+        if direction == .vertical || direction == .bothDirections {
+            for x in stride(from: 0.0, to: pageSize.width, by: spacing) {
+                context.move(to: CGPoint(x: x, y: 0))
+                context.addLine(to: CGPoint(x: x, y: pageSize.height))
+            }
         }
         
         // Draw horizontal lines
-        for y in stride(from: 0.0, to: pageSize.height, by: spacing) {
-            context.move(to: CGPoint(x: 0, y: y))
-            context.addLine(to: CGPoint(x: pageSize.width, y: y))
+        if direction == .horizontal || direction == .bothDirections {
+            for y in stride(from: 0.0, to: pageSize.height, by: spacing) {
+                context.move(to: CGPoint(x: 0, y: y))
+                context.addLine(to: CGPoint(x: pageSize.width, y: y))
+            }
         }
         
         context.strokePath()

@@ -17,6 +17,7 @@ struct NewNoteView: View {
     
     @Query private var userFolders: [PNFolder]
     @State private var selectedFolder: PNFolder?
+    @State private var selectedHandwrittenTemplate: PNWritingPaperTypes = .blank
     @FocusState private var isTextFieldFocused: Bool?
     
     init(_ folderDetailViewModel: FolderDetailViewModel) {
@@ -55,6 +56,12 @@ struct NewNoteView: View {
                         }
                     }
                 }
+                
+                if newNoteType == .handwritten {
+                    Section("Template") {
+                        templatePicker
+                    }
+                }
             }
             .navigationTitle(newNoteType == .typed ? "New Typed Note" : "New Handwritten Note")
             .navigationBarTitleDisplayMode(.inline)
@@ -73,9 +80,44 @@ struct NewNoteView: View {
                 }
             }
         }
+        .presentationSizing(.page)
         .onAppear {
             selectedFolder = sidebarViewModel.selectedFolder
             isTextFieldFocused = true
+        }
+    }
+    
+    private var templatePicker: some View {
+        HStack(alignment: .bottom) {
+            Spacer()
+            ForEach(PNWritingPaperTypes.allCases, id: \.hashValue) { paperType in
+                templatePickerLabel(for: paperType)
+                Spacer()
+            }
+        }
+    }
+    
+    private func templatePickerLabel(for writingPaper: PNWritingPaperTypes) -> some View {
+        VStack {
+            writingPaperTypeIcon(for: writingPaper)
+                .tint(.accentColor)
+                .font(.largeTitle)
+                .frame(height: 60)
+            Text(writingPaper.rawValue)
+            
+            Group {
+                if selectedHandwrittenTemplate == writingPaper {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.white, .blue)
+                } else {
+                    Image(systemName: "circle")
+                }
+            }
+            .font(.title3)
+            .padding(.top, 5)
+        }
+        .onTapGesture {
+            selectedHandwrittenTemplate = writingPaper
         }
     }
     
@@ -104,14 +146,25 @@ struct NewNoteView: View {
         dismiss()
         
         // Create and assign blank page PDF document to the new note
-        if newNote.noteType == .handwritten {
-            // TODO: Change this to a template picker before assigning in the future
-            Task(priority: .userInitiated) {
-                let pdfDocument = await PDFGenerationManager.shared.makeGraphPaperPDF()
-                await MainActor.run { newNote.pdfDocument = pdfDocument }
-            }
+//        if newNote.noteType == .handwritten {
+//            // TODO: Change this to a template picker before assigning in the future
+//            Task(priority: .userInitiated) {
+//                let pdfDocument = await PDFGenerationManager.shared.createWritingPaperPDF()
+//                await MainActor.run { newNote.pdfDocument = pdfDocument }
+//            }
+//        }
+//        noteEditingViewModel.open(newNote)
+    }
+    
+    private func writingPaperTypeIcon(for paperType: PNWritingPaperTypes) -> Image {
+        switch paperType {
+        case .blank:
+            return Image(systemName: "circle.slash")
+        case .lined:
+            return Image(systemName: "line.3.horizontal")
+        case .grid:
+            return Image(systemName: "grid")
         }
-        noteEditingViewModel.open(newNote)
     }
     
     private var newNoteType: PNNoteType {
