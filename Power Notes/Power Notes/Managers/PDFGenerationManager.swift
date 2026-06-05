@@ -30,16 +30,16 @@ class PDFGenerationManager {
             return nil
         }
         
-        let backgroundColor = UIColor(colors[0])
         setBackgroundColor(
             for: context,
-            with: backgroundColor,
+            with: colors[0],
             of: Constants.letterSizePortraitPaper
         )
         
         if paperType != .blank {
             drawLineOnTemplate(
                 for: paperType == .lined ? .horizontal : .bothDirections,
+                lineColor: colors[1],
                 in: context,
                 pageSize: Constants.letterSizePortraitPaper,
                 spacing: 20     // TODO: Replace this with a picker
@@ -54,9 +54,10 @@ class PDFGenerationManager {
         return finalPDFDocument
     }
     
-    private func setBackgroundColor(for context: CGContext, with uiColor: UIColor, of size: CGSize) {
+    private func setBackgroundColor(for context: CGContext, with color: Color, of size: CGSize) {
         context.saveGState()
         
+        let uiColor = UIColor(color)
         let cgColor = uiColor.cgColor
         context.setFillColor(cgColor)
         context.fill([CGRect(origin: CGPoint(x: 0, y: 0), size: size)])
@@ -67,6 +68,7 @@ class PDFGenerationManager {
     
     private func drawLineOnTemplate(
         for direction: PNNoteTemplateDrawingDirection,
+        lineColor: Color,
         in context: CGContext,
         pageSize: CGSize,
         spacing: CGFloat,
@@ -74,6 +76,10 @@ class PDFGenerationManager {
     ) {
         context.saveGState()
         context.setLineWidth(lineWidth)
+        
+        let uiColor = UIColor(lineColor)
+        let cgColor = uiColor.cgColor
+        context.setStrokeColor(cgColor)
         
         // Draw vertical lines
         if direction == .vertical || direction == .bothDirections {
