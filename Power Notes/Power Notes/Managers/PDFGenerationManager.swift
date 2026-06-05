@@ -12,7 +12,10 @@ import SwiftUI
 class PDFGenerationManager {
     static let shared = PDFGenerationManager()
     
-    func createWritingPaperPDF(for paperType: PNWritingPaperTypes) async -> PDFDocument? {
+    func createWritingPaperPDF(
+        for paperType: PNWritingPaperTypes,
+        colors: [Color]
+    ) async -> PDFDocument? {
         let data = NSMutableData()
         
         UIGraphicsBeginPDFContextToData(
@@ -26,6 +29,13 @@ class PDFGenerationManager {
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil
         }
+        
+        let backgroundColor = UIColor(colors[0])
+        setBackgroundColor(
+            for: context,
+            with: backgroundColor,
+            of: Constants.letterSizePortraitPaper
+        )
         
         if paperType != .blank {
             drawLineOnTemplate(
@@ -42,6 +52,17 @@ class PDFGenerationManager {
             return nil
         }
         return finalPDFDocument
+    }
+    
+    private func setBackgroundColor(for context: CGContext, with uiColor: UIColor, of size: CGSize) {
+        context.saveGState()
+        
+        let cgColor = uiColor.cgColor
+        context.setFillColor(cgColor)
+        context.fill([CGRect(origin: CGPoint(x: 0, y: 0), size: size)])
+        
+        context.fillPath()
+        context.restoreGState()
     }
     
     private func drawLineOnTemplate(

@@ -174,7 +174,11 @@ struct NewNoteView: View {
         // Create and assign blank or template PDF document to new handwritten note
         if newNote.noteType == .handwritten {
             Task(priority: .userInitiated) {
-                let pdfDocument = await PDFGenerationManager.shared.createWritingPaperPDF(for: selectedHandwrittenTemplate)
+                let selectedColours = [selectedTemplateBackgroundColor, selectedTemplateLineColor]
+                let pdfDocument = await PDFGenerationManager.shared.createWritingPaperPDF(
+                    for: selectedHandwrittenTemplate,
+                    colors: selectedColours
+                )
                 await MainActor.run { newNote.pdfDocument = pdfDocument }
             }
         }
