@@ -22,7 +22,7 @@ struct NoteEditingView: View {
         
         NavigationStack {
             VStack {
-                PDFMarkupView(note: currentNoteBindable)
+                PDFMarkupView(note: currentNoteBindable, noteEditingViewModel)
                     .ignoresSafeArea()
             }
             .navigationTitle(currentNoteBindable.name)
@@ -46,11 +46,11 @@ struct NoteEditingView: View {
                     }
                 }
                 
-                if horizontalSizeClass == .compact {
+                if !isRegularSize {
                     ToolbarSpacer(.flexible, placement: .bottomBar)
                 }
                 
-                ToolbarItemGroup(placement: horizontalSizeClass == .regular ? .primaryAction : .bottomBar) {
+                ToolbarItemGroup(placement: isRegularSize ? .primaryAction : .bottomBar) {
                     drawingToolsToggle
                     shapesToolToggle
                 }
@@ -157,6 +157,10 @@ struct NoteEditingView: View {
         } set: { newValue in
             noteEditingViewModel.currentNote = newValue
         }
+    }
+    
+    private var isRegularSize: Bool {
+        horizontalSizeClass == .regular
     }
 }
 

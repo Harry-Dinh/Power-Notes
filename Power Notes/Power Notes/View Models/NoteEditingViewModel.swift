@@ -19,19 +19,19 @@ class NoteEditingViewModel {
     let tools: [PNWritingTool] = [
         PNWritingTool(
             toolType: .fountainPen,
-            inkingTool: PKInkingTool(ink: PKInk(.fountainPen, color: .black), width: 30)
+            pkTool: PKInkingTool(ink: PKInk(.pen, color: .black), width: 30)
         ),
         PNWritingTool(
             toolType: .highlighter,
-            inkingTool: PKInkingTool(ink: PKInk(.marker), width: 30)
+            pkTool: PKInkingTool(ink: PKInk(.marker), width: 30)
         ),
         PNWritingTool(
             toolType: .eraser,
-            eraserTool: PKEraserTool(.vector)
+            pkTool: PKEraserTool(.vector)
         ),
         PNWritingTool(
             toolType: .lasso,
-            lassoTool: PKLassoTool()
+            pkTool: PKLassoTool()
         )
     ]
     

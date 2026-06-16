@@ -11,6 +11,7 @@ import SwiftData
 struct FolderDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(SidebarViewModel.self) private var sidebarViewModel
     @Environment(NoteEditingViewModel.self) private var noteEditingViewModel
     @Environment(FolderDetailViewModel.self) private var folderDetailViewModel
@@ -46,8 +47,15 @@ struct FolderDetailView: View {
             "\(folder.noteCount) notes" : "\(folder.noteCount) notes • \(folder.subfoldersCount) folders"
         )
         .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
+            if isCompactSize {
+                ToolbarSpacer(.flexible, placement: .bottomBar)
+            }
+            
+            ToolbarItemGroup(placement: isCompactSize ? .bottomBar : .primaryAction) {
                 createNoteButton
+            }
+            
+            ToolbarItemGroup(placement: .primaryAction) {
                 moreMenu
             }
         }
@@ -139,6 +147,12 @@ struct FolderDetailView: View {
         Button("Rename...", systemImage: "pencil") {
             folderDetailViewModel.noteRenameInitAction(for: note)
         }
+    }
+    
+    // MARK: - Helper Functions and Properties
+    
+    private var isCompactSize: Bool {
+        horizontalSizeClass == .compact
     }
 }
 

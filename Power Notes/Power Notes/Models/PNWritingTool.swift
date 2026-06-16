@@ -22,20 +22,14 @@ struct PNWritingTool: Identifiable {
     }
     
     var toolType: PNWritingToolType
-    var inkingTool: PKInkingTool?
-    var lassoTool: PKLassoTool?
-    var eraserTool: PKEraserTool?
+    var pkTool: PKTool?
     
     init(
         toolType: PNWritingToolType,
-        inkingTool: PKInkingTool? = nil,
-        lassoTool: PKLassoTool? = nil,
-        eraserTool: PKEraserTool? = nil
+        pkTool: PKTool?
     ) {
         self.toolType = toolType
-        self.inkingTool = inkingTool
-        self.lassoTool = lassoTool
-        self.eraserTool = eraserTool
+        self.pkTool = pkTool
     }
     
     static func icon(for toolType: PNWritingToolType) -> Image {

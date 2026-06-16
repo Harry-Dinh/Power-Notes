@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import PencilKit
 
-class Constants {
+final class Constants {
     static let inboxFolderUUID = UUID(uuidString: "PWRNOTE-INBOX-UUID") ?? UUID()
     
     // MARK: - UserDefaults Keys
@@ -17,4 +18,8 @@ class Constants {
     // MARK: - PDF Page Templates Specs
     
     static let letterSizePortraitPaper = CGSize(width: 612, height: 792)
+    
+    // MARK: - Other Stuff
+    
+    static let defaultSelectedTool = PKInkingTool(ink: PKInk(.pen, color: .black), width: 30)
 }
