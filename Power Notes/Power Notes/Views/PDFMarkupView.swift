@@ -42,10 +42,19 @@ struct PDFMarkupView: UIViewRepresentable {
     
     func updateUIView(_ uiView: PDFView, context: Context) {
         context.coordinator.parent = self
+        
+        /*
+         Declaring this outside of the loop to make SwiftUI notice the update to listen to.
+         Because when the view first appears, there will be no views in the PDF document, it has to load in first.
+         Due to that, the code inside the loop never gets run, making SwiftUI not know when to start listening to updates.
+         */
+        let currentTool = selectedTool
+        let currentDrawingState = isDrawingEnabled
+        
         for view in context.coordinator.pageToViewMapping.values {
             if let canvasView = view as? PKCanvasView {
-                canvasView.tool = selectedTool
-                canvasView.isDrawingEnabled = isDrawingEnabled
+                canvasView.tool = currentTool
+                canvasView.isDrawingEnabled = currentDrawingState
             }
         }
         uiView.isInMarkupMode = isDrawingEnabled

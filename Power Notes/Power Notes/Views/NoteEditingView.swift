@@ -19,6 +19,7 @@ struct NoteEditingView: View {
     
     var body: some View {
         @Bindable var folderDetailViewModel = folderDetailViewModel
+        @Bindable var noteEditingViewModel = noteEditingViewModel
         
         NavigationStack {
             VStack {
