@@ -14,6 +14,7 @@ final class PNNote {
     @Attribute(.unique) var id: UUID
     var name: String
     var parentFolder: PNFolder?
+    var noteType: PNNoteType
     
     var pdfData: Data?
     @Transient var pdfDocument: PDFDocument? {
@@ -37,6 +38,7 @@ final class PNNote {
     init(
         id: UUID = UUID(),
         name: String,
+        noteType: PNNoteType,
         pdfDocument: PDFDocument? = nil,
         markdownText: String? = nil,
         createdOn: Date? = nil,
@@ -44,6 +46,7 @@ final class PNNote {
     ) {
         self.id = id
         self.name = name
+        self.noteType = noteType
         self.pdfDocument = pdfDocument
         self.markdownText = markdownText
         self.createdOn = createdOn
@@ -53,6 +56,7 @@ final class PNNote {
     static let placeholder = PNNote(
         id: UUID(),
         name: "The Final Frontier",
+        noteType: .typed,
         pdfDocument: nil,
         markdownText:
             """

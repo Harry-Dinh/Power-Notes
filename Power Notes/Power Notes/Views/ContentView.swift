@@ -9,15 +9,18 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(SidebarViewModel.self) private var sidebarViewModel
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var hSizeClass
+    @Environment(SidebarViewModel.self) private var sidebarViewModel
+    @Environment(NoteEditingViewModel.self) private var noteEditingViewModel
+    @Environment(FolderDetailViewModel.self) private var folderDetailViewModel
     
     @Query private var userFolders: [PNFolder]
     @Query private var userNotes: [PNNote]
     
     var body: some View {
         @Bindable var sidebarViewModel = sidebarViewModel
+        @Bindable var noteEditingViewModel = noteEditingViewModel
         
         NavigationSplitView {
             ZStack {
@@ -69,6 +72,7 @@ struct ContentView: View {
                 ContentUnavailableView("No Folder Selected", systemImage: "folder")
             }
         }
+        // MARK: Alerts
         .alert(
             "Create New Folder",
             isPresented: $sidebarViewModel.showNewFolderAlert
@@ -105,6 +109,28 @@ struct ContentView: View {
                 }
                 sidebarViewModel.selectedFolderForDeletion = nil
             }
+        }
+        .alert(
+            "Rename Folder",
+            isPresented: $sidebarViewModel.showFolderRenameAlert
+        ) {
+            if let selectedFolder = Binding($sidebarViewModel.selectedFolderForRename) {
+                TextField("Folder name", text: selectedFolder.name)
+                Button(role: .cancel) {
+                    selectedFolder.wrappedValue.name = sidebarViewModel.renameFolderOldName
+                }
+                Button(role: .confirm, action: {
+                    sidebarViewModel.renameFolderOldName = ""
+                }) {
+                    Text("Rename")
+                }
+                .keyboardShortcut(.defaultAction)
+                .disabled(selectedFolder.wrappedValue.name.isEmpty)
+            }
+        }
+        // MARK: Note Editing View
+        .fullScreenCover(isPresented: $noteEditingViewModel.showEditingView) {
+            NoteEditingView()
         }
     }
     
@@ -143,6 +169,7 @@ struct ContentView: View {
                 }
             }
             .contextMenu {
+                renameFolderButton(folder)
                 deleteFolderButton(folder)
             }
         }
@@ -154,6 +181,16 @@ struct ContentView: View {
             sidebarViewModel.showFolderDeletionAlert = true
         }) {
             Label("Delete...", systemImage: "trash")
+        }
+    }
+    
+    private func renameFolderButton(_ folder: PNFolder) -> some View {
+        Button(action: {
+            sidebarViewModel.selectedFolderForRename = folder
+            sidebarViewModel.renameFolderOldName = folder.name
+            sidebarViewModel.showFolderRenameAlert = true
+        }) {
+            Label("Rename...", systemImage: "pencil")
         }
     }
     

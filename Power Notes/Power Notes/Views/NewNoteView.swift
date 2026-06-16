@@ -10,12 +10,18 @@ import SwiftData
 
 struct NewNoteView: View {
     @Environment(SidebarViewModel.self) private var sidebarViewModel
+    @Environment(NoteEditingViewModel.self) private var noteEditingViewModel
     @Environment(\.dismiss) private var dismiss
     
     @Bindable var folderDetailViewModel: FolderDetailViewModel
     
     @Query private var userFolders: [PNFolder]
     @State private var selectedFolder: PNFolder?
+    
+    @State private var selectedHandwrittenTemplate: PNWritingPaperTypes = .blank
+    @State private var selectedTemplateBackgroundColor: Color = .white
+    @State private var selectedTemplateLineColor: Color = .black
+    
     @FocusState private var isTextFieldFocused: Bool?
     
     init(_ folderDetailViewModel: FolderDetailViewModel) {
@@ -54,8 +60,16 @@ struct NewNoteView: View {
                         }
                     }
                 }
+                
+                if newNoteType == .handwritten {
+                    Section("Template") {
+                        templatePicker
+                        pageBackgroundColorPicker
+                        pageLineColorPicker
+                    }
+                }
             }
-            .navigationTitle("Create New Note")
+            .navigationTitle(newNoteType == .typed ? "New Typed Note" : "New Handwritten Note")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -72,15 +86,73 @@ struct NewNoteView: View {
                 }
             }
         }
+        .presentationSizing(.page)
         .onAppear {
             selectedFolder = sidebarViewModel.selectedFolder
             isTextFieldFocused = true
         }
     }
     
+    private var templatePicker: some View {
+        VStack {
+            HStack(alignment: .bottom) {
+                Spacer()
+                ForEach(PNWritingPaperTypes.allCases, id: \.hashValue) { paperType in
+                    templatePickerLabel(for: paperType)
+                    Spacer()
+                }
+            }
+            
+            Divider()
+                .padding(.top)
+        }
+        .listRowSeparator(.hidden)
+    }
+    
+    private func templatePickerLabel(for writingPaper: PNWritingPaperTypes) -> some View {
+        VStack {
+            writingPaperTypeIcon(for: writingPaper)
+                .tint(.accentColor)
+                .font(.largeTitle)
+                .frame(height: 60)
+            Text(writingPaper.rawValue)
+            
+            Group {
+                if selectedHandwrittenTemplate == writingPaper {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.white, .blue)
+                } else {
+                    Image(systemName: "circle")
+                }
+            }
+            .font(.title3)
+            .padding(.top, 5)
+        }
+        .onTapGesture {
+            selectedHandwrittenTemplate = writingPaper
+        }
+    }
+    
+    private var pageBackgroundColorPicker: some View {
+        ColorPicker("Background Color", selection: $selectedTemplateBackgroundColor)
+    }
+    
+    @ViewBuilder
+    private var pageLineColorPicker: some View {
+        if selectedHandwrittenTemplate == .grid || selectedHandwrittenTemplate == .lined {
+            ColorPicker(
+                selectedHandwrittenTemplate == .grid ? "Grid Color" : "Line Color",
+                selection: $selectedTemplateLineColor
+            )
+        }
+    }
+    
+    // MARK: - Helper Functions and Properties
+    
     private func dismissAction() {
         dismiss()
         folderDetailViewModel.newNoteName = ""
+        sidebarViewModel.newNoteType = nil
     }
     
     private func createNewNoteAction() {
@@ -93,11 +165,39 @@ struct NewNoteView: View {
             sidebarViewModel.selectedFolder = selectedFolder
         }
         
-        let newNote = PNNote(name: folderDetailViewModel.newNoteName)
+        let newNote = PNNote(name: folderDetailViewModel.newNoteName, noteType: newNoteType)
         sidebarViewModel.selectedFolder?.notes?.append(newNote)
         
         folderDetailViewModel.newNoteName = ""
         dismiss()
+        
+        // Create and assign blank or template PDF document to new handwritten note
+        if newNote.noteType == .handwritten {
+            Task(priority: .userInitiated) {
+                let selectedColours = [selectedTemplateBackgroundColor, selectedTemplateLineColor]
+                let pdfDocument = await PDFGenerationManager.shared.createWritingPaperPDF(
+                    for: selectedHandwrittenTemplate,
+                    colors: selectedColours
+                )
+                await MainActor.run { newNote.pdfDocument = pdfDocument }
+            }
+        }
+        noteEditingViewModel.open(newNote)
+    }
+    
+    private func writingPaperTypeIcon(for paperType: PNWritingPaperTypes) -> Image {
+        switch paperType {
+        case .blank:
+            return Image(systemName: "circle.slash")
+        case .lined:
+            return Image(systemName: "line.3.horizontal")
+        case .grid:
+            return Image(systemName: "grid")
+        }
+    }
+    
+    private var newNoteType: PNNoteType {
+        sidebarViewModel.newNoteType ?? .typed
     }
 }
 

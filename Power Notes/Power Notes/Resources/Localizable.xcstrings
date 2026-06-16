@@ -17,16 +17,19 @@
         }
       }
     },
+    "Background Color" : {
+
+    },
     "Cancel" : {
+
+    },
+    "Close" : {
 
     },
     "Create" : {
 
     },
     "Create New Folder" : {
-
-    },
-    "Create New Note" : {
 
     },
     "Delete" : {
@@ -41,7 +44,25 @@
     "Delete..." : {
 
     },
+    "Document Overview" : {
+
+    },
+    "Drawing Tools" : {
+
+    },
+    "Folder name" : {
+
+    },
     "Folders" : {
+
+    },
+    "Grid Color" : {
+
+    },
+    "Line Color" : {
+
+    },
+    "More" : {
 
     },
     "My Folders" : {
@@ -50,7 +71,13 @@
     "New Folder" : {
 
     },
+    "New Handwritten Note" : {
+
+    },
     "New Note" : {
+
+    },
+    "New Typed Note" : {
 
     },
     "No Folder Selected" : {
@@ -59,10 +86,37 @@
     "No Folders" : {
 
     },
+    "Note name" : {
+
+    },
     "Notes" : {
 
     },
     "Place new note in:" : {
+
+    },
+    "Redo" : {
+
+    },
+    "Rename" : {
+
+    },
+    "Rename Folder" : {
+
+    },
+    "Rename Note" : {
+
+    },
+    "Rename..." : {
+
+    },
+    "Shape Tools" : {
+
+    },
+    "Template" : {
+
+    },
+    "Undo" : {
 
     }
   },

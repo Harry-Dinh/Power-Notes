@@ -11,11 +11,12 @@ import SwiftData
 struct FolderDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(SidebarViewModel.self) private var sidebarViewModel
+    @Environment(NoteEditingViewModel.self) private var noteEditingViewModel
+    @Environment(FolderDetailViewModel.self) private var folderDetailViewModel
     
     @Binding var folder: PNFolder
-    
-    @State private var folderDetailViewModel = FolderDetailViewModel()
     
     init(folder: Binding<PNFolder>) {
         self._folder = folder
@@ -23,6 +24,7 @@ struct FolderDetailView: View {
     
     var body: some View {
         @Bindable var sidebarViewModel = sidebarViewModel
+        @Bindable var folderDetailViewModel = folderDetailViewModel
         
         ZStack {
             Color(
@@ -45,12 +47,26 @@ struct FolderDetailView: View {
             "\(folder.noteCount) notes" : "\(folder.noteCount) notes • \(folder.subfoldersCount) folders"
         )
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            if isCompactSize {
+                ToolbarSpacer(.flexible, placement: .bottomBar)
+            }
+            
+            ToolbarItemGroup(placement: isCompactSize ? .bottomBar : .primaryAction) {
                 createNoteButton
+            }
+            
+            ToolbarItemGroup(placement: .primaryAction) {
+                moreMenu
             }
         }
         .sheet(isPresented: $sidebarViewModel.showNewNoteCreationSheet) {
             NewNoteView(folderDetailViewModel)
+        }
+        .alert(
+            "Rename Note",
+            isPresented: $folderDetailViewModel.showNoteRenameAlert
+        ) {
+            NoteRenameAlertComponents(folderDetailViewModel)
         }
     }
     
@@ -70,20 +86,51 @@ struct FolderDetailView: View {
         if let notes = folder.notes, !notes.isEmpty {
             Section("Notes") {
                 ForEach(notes) { note in
-                    Label(note.name, systemImage: "note.text")
+                    Button(action: {
+                        noteEditingViewModel.open(note)
+                    }) {
+                        Label(
+                            note.name,
+                            systemImage: note.noteType == .typed ? "note.text" : "pencil.line"
+                        )
                         .contextMenu {
+                            renameNoteButton(for: note)
                             deleteNoteButton(with: note)
                         }
+                    }
+                    .buttonStyle(.plain)
                 }
             }
         }
     }
     
     private var createNoteButton: some View {
-        Button(action: {
-            sidebarViewModel.showNewNoteCreationSheet = true
-        }) {
+        Menu {
+            Button("New Typed Note", systemImage: "keyboard") {
+                sidebarViewModel.newNoteType = .typed
+                sidebarViewModel.showNewNoteCreationSheet = true
+            }
+            Button("New Handwritten Note", systemImage: "pencil.line") {
+                sidebarViewModel.newNoteType = .handwritten
+                sidebarViewModel.showNewNoteCreationSheet = true
+            }
+        } label: {
             Label("New Note", systemImage: "square.and.pencil")
+        }
+    }
+    
+    @ViewBuilder
+    private var moreMenu: some View {
+        // TODO: In the future, make sure to disable the edit buttons, not the whole menu
+        if !folder.isInboxFolder {
+            Menu {
+                Button("Rename...", systemImage: "pencil") {
+                    sidebarViewModel.selectedFolderForRename = folder
+                    sidebarViewModel.showFolderRenameAlert = true
+                }
+            } label: {
+                Label("More", systemImage: "ellipsis")
+            }
         }
     }
     
@@ -94,6 +141,18 @@ struct FolderDetailView: View {
         }) {
             Label("Delete Note", systemImage: "trash")
         }
+    }
+    
+    private func renameNoteButton(for note: PNNote) -> some View {
+        Button("Rename...", systemImage: "pencil") {
+            folderDetailViewModel.noteRenameInitAction(for: note)
+        }
+    }
+    
+    // MARK: - Helper Functions and Properties
+    
+    private var isCompactSize: Bool {
+        horizontalSizeClass == .compact
     }
 }
 
