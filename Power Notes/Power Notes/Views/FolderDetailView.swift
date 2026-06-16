@@ -39,6 +39,12 @@ struct FolderDetailView: View {
                     notesSection
                 }
                 .listRowBackground(Color.clear)
+            } else {
+                ContentUnavailableView(
+                    folder.isInboxFolder ? "No Notes" : "No Notes or Folders",
+                    systemImage: "note.text"
+                )
+                ScrollView {}   // Empty scroll view for scrollable title behaviour
             }
         }
         .navigationTitle(folder.name)
