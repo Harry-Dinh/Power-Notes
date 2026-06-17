@@ -32,6 +32,8 @@ struct Power_NotesApp: App {
                 createNewNoteMenu
                 newFolderButton
             }
+            
+            SidebarCommands()
         }
     }
     
@@ -43,13 +45,13 @@ struct Power_NotesApp: App {
                 sidebarViewModel.newNoteType = .typed
                 sidebarViewModel.showNewNoteCreationSheet = true
             }
-            .keyboardShortcut("N")
+            .keyboardShortcut("N")  // Cmd + N
             
             Button("Handwritten Note") {
                 sidebarViewModel.newNoteType = .handwritten
                 sidebarViewModel.showNewNoteCreationSheet = true
             }
-            .keyboardShortcut("N", modifiers: [.command, .option])
+            .keyboardShortcut("N", modifiers: [.command, .option])  // Opt + Cmd + N
         } label: {
             Label("New Note", systemImage: "square.and.pencil")
         }
@@ -62,6 +64,6 @@ struct Power_NotesApp: App {
         }) {
             Label("New Folder", systemImage: "folder.badge.plus")
         }
-        .keyboardShortcut("N", modifiers: [.command, .shift])
+        .keyboardShortcut("N", modifiers: [.command, .shift])   // Shift + Cmd + N
     }
 }
