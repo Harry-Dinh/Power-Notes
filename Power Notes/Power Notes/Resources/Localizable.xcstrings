@@ -59,6 +59,9 @@
     "Grid Color" : {
 
     },
+    "Handwritten Note" : {
+
+    },
     "Line Color" : {
 
     },
@@ -84,6 +87,12 @@
 
     },
     "No Folders" : {
+
+    },
+    "No Notes" : {
+
+    },
+    "No Notes or Folders" : {
 
     },
     "Note name" : {
@@ -114,6 +123,9 @@
 
     },
     "Template" : {
+
+    },
+    "Typed Note" : {
 
     },
     "Undo" : {
